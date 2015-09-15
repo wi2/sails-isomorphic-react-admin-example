@@ -6,7 +6,7 @@
  */
 
 // var routes = require('../../components/routes');
-import routes from '../../components/routes'
+import routes from '../../components/admin/routes'
 
 
 module.exports = {
