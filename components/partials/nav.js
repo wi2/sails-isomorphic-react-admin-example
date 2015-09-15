@@ -23,7 +23,7 @@ export class Nav {
                   data-toggle="dropdown" role="button"
                   aria-haspopup="true" aria-expanded="false">
                     {identity}
-                    <span class="caret"></span>
+                    <span className="caret"></span>
                   </a>
                   <ul className="dropdown-menu">
                     <li>

@@ -713,7 +713,7 @@ var Nav = (function () {
                     'data-toggle': 'dropdown', role: 'button',
                     'aria-haspopup': 'true', 'aria-expanded': 'false' },
                   identity,
-                  _react2['default'].createElement('span', { 'class': 'caret' })
+                  _react2['default'].createElement('span', { className: 'caret' })
                 ),
                 _react2['default'].createElement(
                   'ul',

@@ -1,14 +1,14 @@
 
+
 module.exports = function(def) {
-  var res = [];
   var definition = sails.models[def].definition;
-  console.log(definition);
-  console.log(sails.models[def].associations);
-  for (var prop in definition) {
-    res.push( prepare(def, definition[prop], prop) );
-  }
-  return res;
-}
+  //Promise
+  return new Promise(function(resolve, reject) {
+    Promise.all(Object.keys(definition).map( assoc => { return prepare(def, definition[assoc], assoc); }) )
+    .then( results => { resolve(results); } )
+    .catch( err => { reject(err); } )
+  });
+};
 
 function prepare(def, data, attr) {
   var res = {label: attr};
@@ -33,5 +33,17 @@ function prepare(def, data, attr) {
     res.in = validator.in;
     res.input = 'choice';
   }
-  return res;
+  //Promise
+  return new Promise( (resolve, reject) => {
+    if (data.alias && data.model)
+      sails.models[data.alias].find()
+      .then( list => {
+        res.input = 'choice';
+        res.in = list.map( item => { return [item.id, item[Object.keys(item)[1]]]; });
+        resolve(res);
+      } )
+      .catch( err => { reject(err); } )
+    else
+      resolve(res);
+  });
 }
