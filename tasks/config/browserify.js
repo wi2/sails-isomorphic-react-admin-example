@@ -20,9 +20,13 @@ module.exports = function(grunt) {
       ],
       harmony: true
     },
-    dev: {
-      src: ['./components/**/*.jsx','./components/**/*.js','./components/*.js'],
-      dest: './assets/js/bundle.js'
+    front: {
+      src: ['./components/front/**/*.js','./components/front/*.js'],
+      dest: './assets/js/front/bundle.js'
+    },
+    admin: {
+      src: ['./components/admin/**/*.js','./components/admin/*.js'],
+      dest: './assets/js/admin/bundle.js'
     }
   });
 

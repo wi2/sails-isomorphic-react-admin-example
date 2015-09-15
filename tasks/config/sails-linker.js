@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': require('../pipeline').jsFilesToInject,
 				'views/**/*.html': require('../pipeline').jsFilesToInject,
-				'views/**/*.ejs': require('../pipeline').jsFilesToInject
+				'views/layout.ejs': require('../pipeline').jsFilesToInject
 			}
 		},
 
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': require('../pipeline').jsFilesToInject,
 				'views/**/*.html': require('../pipeline').jsFilesToInject,
-				'views/**/*.ejs': require('../pipeline').jsFilesToInject
+				'views/layout.ejs': require('../pipeline').jsFilesToInject
 			}
 		},
 
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
 				'views/**/*.html': ['.tmp/public/min/production.min.js'],
-				'views/**/*.ejs': ['.tmp/public/min/production.min.js']
+				'views/layout.ejs': ['.tmp/public/min/production.min.js']
 			}
 		},
 
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
 				'views/**/*.html': ['.tmp/public/min/production.min.js'],
-				'views/**/*.ejs': ['.tmp/public/min/production.min.js']
+				'views/layout.ejs': ['.tmp/public/min/production.min.js']
 			}
 		},
 
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': require('../pipeline').cssFilesToInject,
 				'views/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.ejs': require('../pipeline').cssFilesToInject
+				'views/layout.ejs': require('../pipeline').cssFilesToInject
 			}
 		},
 
@@ -99,7 +99,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': require('../pipeline').cssFilesToInject,
 				'views/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.ejs': require('../pipeline').cssFilesToInject
+				'views/layout.ejs': require('../pipeline').cssFilesToInject
 			}
 		},
 
@@ -113,7 +113,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
 				'views/**/*.html': ['.tmp/public/min/production.min.css'],
-				'views/**/*.ejs': ['.tmp/public/min/production.min.css']
+				'views/layout.ejs': ['.tmp/public/min/production.min.css']
 			}
 		},
 
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
 				'views/**/*.html': ['.tmp/public/min/production.min.css'],
-				'views/**/*.ejs': ['.tmp/public/min/production.min.css']
+				'views/layout.ejs': ['.tmp/public/min/production.min.css']
 			}
 		},
 
@@ -143,7 +143,7 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/index.html': ['.tmp/public/jst.js'],
 				'views/**/*.html': ['.tmp/public/jst.js'],
-				'views/**/*.ejs': ['.tmp/public/jst.js']
+				'views/layout.ejs': ['.tmp/public/jst.js']
 			}
 		},
 
@@ -260,7 +260,109 @@ module.exports = function(grunt) {
 			files: {
 				'views/**/*.jade': ['.tmp/public/jst.js']
 			}
-		}
+		},
+		//Admin
+		devAdminJs: {
+	    options: {
+	      startTag: '<!--SCRIPTS-->',
+	      endTag: '<!--SCRIPTS END-->',
+	      fileTmpl: '<script src="%s"></script>',
+	      appRoot: '.tmp/public'
+	    },
+	    files: {
+	      'views/admin.ejs': require('../pipeline').jsAdminFilesToInject
+	    }
+	  },
+
+	  devAdminJsRelative: {
+	    options: {
+	      startTag: '<!--SCRIPTS-->',
+	      endTag: '<!--SCRIPTS END-->',
+	      fileTmpl: '<script src="%s"></script>',
+	      appRoot: '.tmp/public',
+	      relative: true
+	    },
+	    files: {
+	      'views/admin.ejs': require('../pipeline').jsAdminFilesToInject
+	    }
+	  },
+
+	  prodAdminJs: {
+	    options: {
+	      startTag: '<!--SCRIPTS-->',
+	      endTag: '<!--SCRIPTS END-->',
+	      fileTmpl: '<script src="%s"></script>',
+	      appRoot: '.tmp/public'
+	    },
+	    files: {
+	      'views/admin.ejs': ['.tmp/public/min/admin/production.min.js']
+	    }
+	  },
+
+	  prodAdminJsRelative: {
+	    options: {
+	      startTag: '<!--SCRIPTS-->',
+	      endTag: '<!--SCRIPTS END-->',
+	      fileTmpl: '<script src="%s"></script>',
+	      appRoot: '.tmp/public',
+	      relative: true
+	    },
+	    files: {
+	      'views/admin.ejs': ['.tmp/public/min/admin/production.min.js']
+	    }
+	  },
+
+	  devAdminStyles: {
+	    options: {
+	      startTag: '<!--STYLES-->',
+	      endTag: '<!--STYLES END-->',
+	      fileTmpl: '<link rel="stylesheet" href="%s">',
+	      appRoot: '.tmp/public'
+	    },
+
+	    files: {
+	      'views/admin.ejs': require('../pipeline').cssAdminFilesToInject
+	    }
+	  },
+
+	  devAdminStylesRelative: {
+	    options: {
+	      startTag: '<!--STYLES-->',
+	      endTag: '<!--STYLES END-->',
+	      fileTmpl: '<link rel="stylesheet" href="%s">',
+	      appRoot: '.tmp/public',
+	      relative: true
+	    },
+
+	    files: {
+	      'views/admin.ejs': require('../pipeline').cssAdminFilesToInject
+	    }
+	  },
+
+	  prodAdminStyles: {
+	    options: {
+	      startTag: '<!--STYLES-->',
+	      endTag: '<!--STYLES END-->',
+	      fileTmpl: '<link rel="stylesheet" href="%s">',
+	      appRoot: '.tmp/public'
+	    },
+	    files: {
+	      'views/admin.ejs': ['.tmp/public/min/admin/production.min.css']
+	    }
+	  },
+
+	  prodAdminStylesRelative: {
+	    options: {
+	      startTag: '<!--STYLES-->',
+	      endTag: '<!--STYLES END-->',
+	      fileTmpl: '<link rel="stylesheet" href="%s">',
+	      appRoot: '.tmp/public',
+	      relative: true
+	    },
+	    files: {
+	      'views/admin.ejs': ['.tmp/public/min/admin/production.min.css']
+	    }
+	  }
 	});
 
 	grunt.loadNpmTasks('grunt-sails-linker');
