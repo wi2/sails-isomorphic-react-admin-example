@@ -32,12 +32,28 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': 'HomeController.home',
+  '/': 'Home.home',
 
-  '/admin': 'HomeController.admin',
-  '/admin/:identity': 'HomeController.list',
-  '/admin/:identity/new': 'HomeController.new',
-  '/admin/:identity/:id': 'HomeController.update',
+  '/admin': {
+    controller: 'Home',
+    action: 'admin',
+    locals: {layout: 'admin'}
+  },
+  '/admin/:identity': {
+    controller: 'Home',
+    action: 'list',
+    locals: {layout: 'admin'}
+  },
+  '/admin/:identity/new': {
+    controller: 'Home',
+    action: 'new',
+    locals: {layout: 'admin'}
+  },
+  '/admin/:identity/:id': {
+    controller: 'Home',
+    action: 'update',
+    locals: {layout: 'admin'}
+  },
 
   /***************************************************************************
   *                                                                          *
