@@ -14,28 +14,8 @@ export class Nav {
               <Link to="home">Home</Link>
             </li>
             <li>
-              <Link to="admin">Admin</Link>
+              <a href="/admin">Admin</a>
             </li>
-            {identities && identities.map( identity => {
-              return (
-                <li className="dropdown" key={identity}>
-                  <a href="#" className="dropdown-toggle"
-                  data-toggle="dropdown" role="button"
-                  aria-haspopup="true" aria-expanded="false">
-                    {identity}
-                    <span className="caret"></span>
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <Link to="admin-list" params={{identity}}>List</Link>
-                    </li>
-                    <li>
-                      <Link to="admin-new" params={{identity}}>Create</Link>
-                    </li>
-                  </ul>
-                </li>
-              );
-            })}
           </ul>
         </div>
       </nav>

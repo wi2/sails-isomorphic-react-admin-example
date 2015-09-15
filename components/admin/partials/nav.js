@@ -11,7 +11,7 @@ export class Nav {
         <div className="container">
           <ul className="nav navbar-nav">
             <li>
-              <Link to="home">Home</Link>
+              <a href="/">Home</a>
             </li>
             <li>
               <Link to="admin">Admin</Link>

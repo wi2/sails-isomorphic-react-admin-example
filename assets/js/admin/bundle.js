@@ -699,8 +699,8 @@ var Nav = (function () {
               'li',
               null,
               _react2['default'].createElement(
-                _reactRouter.Link,
-                { to: 'home' },
+                'a',
+                { href: '/' },
                 'Home'
               )
             ),
@@ -780,11 +780,10 @@ var admin = _interopRequireWildcard(_pagesAdmin);
 module.exports = _react2['default'].createElement(
   _reactRouter.Route,
   { handler: _reactRouter.RouteHandler },
-  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/', handler: require('./pages/home.js') }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin', path: '/admin', handler: admin.Home }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin-list', path: '/admin/:identity', handler: admin.List }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin-new', path: '/admin/:identity/new', handler: admin.ListItemNew }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: admin.ListItemUpdate })
 );
 
-},{"./pages/admin":3,"./pages/home.js":4,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);
+},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);
