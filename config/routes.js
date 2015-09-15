@@ -35,22 +35,22 @@ module.exports.routes = {
   '/': 'Home.home',
 
   '/admin': {
-    controller: 'Home',
-    action: 'admin',
+    controller: 'Admin',
+    action: 'home',
     locals: {layout: 'admin'}
   },
   '/admin/:identity': {
-    controller: 'Home',
+    controller: 'Admin',
     action: 'list',
     locals: {layout: 'admin'}
   },
   '/admin/:identity/new': {
-    controller: 'Home',
+    controller: 'Admin',
     action: 'new',
     locals: {layout: 'admin'}
   },
   '/admin/:identity/:id': {
-    controller: 'Home',
+    controller: 'Admin',
     action: 'update',
     locals: {layout: 'admin'}
   },
