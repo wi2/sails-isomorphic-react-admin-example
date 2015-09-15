@@ -16,7 +16,7 @@ export class Nav {
             <li>
               <Link to="admin">Admin</Link>
             </li>
-            {identities && identities.map( (identity) => {
+            {identities && identities.map( identity => {
               return (
                 <li className="dropdown" key={identity}>
                   <a href="#" className="dropdown-toggle"

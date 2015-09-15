@@ -95,25 +95,21 @@ var Home = (function (_React$Component) {
   _createClass(Home, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      if (!this.props.identities) {
-        this.getHome();
-      }
+      this.getHome();
     }
   }, {
     key: 'componentWillUpdate',
     value: function componentWillUpdate(props) {
-      if (!this.props.identities) {
-        this.getHome();
-      }
+      this.getHome();
     }
   }, {
     key: 'getHome',
     value: function getHome() {
-      if (typeof io !== "undefined") {
-        io.socket.get("/admin", (function (res) {
-          this.setState(res);
-        }).bind(this));
-      }
+      var _this = this;
+
+      if (typeof io !== "undefined") io.socket.get("/admin", (function (res) {
+        _this.setState(res);
+      }).bind(this));
     }
   }, {
     key: 'render',
@@ -155,32 +151,22 @@ var ListItem = (function (_React$Component2) {
       if (this.props.params.identity !== props.params.identity) this.getItem(props.params.identity);
     }
   }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate() {
-      console.log("rer", this.state);
-      return true;
-      // return ( !this.loading && ( this.props.formItem || (this.state && this.state.formItem) ) )
-    }
-  }, {
     key: 'getItem',
     value: function getItem(identity) {
+      var _this2 = this;
+
       this.loading = true;
       var url = this.props.params.id ? "/" + this.props.params.id : "/new";
       if (typeof io !== "undefined") {
         io.socket.get("/admin/" + identity + url, (function (res) {
-          this.loading = false;
-          this.setState(res);
+          _this2.loading = false;
+          _this2.setState(res);
         }).bind(this));
       }
     }
   }, {
     key: 'onSave',
-    value: function onSave(data) {
-      if (typeof io !== "undefined") {
-        var identity = this.props.identity || this.props.params.identity;
-        io.socket.put("/" + identity + "/" + this.props.params.id, data, (function (res) {}).bind(this));
-      }
-    }
+    value: function onSave(data) {}
   }, {
     key: 'render',
     value: function render() {
@@ -196,10 +182,32 @@ var ListItem = (function (_React$Component2) {
   return ListItem;
 })(_react2['default'].Component);
 
-exports.ListItem = ListItem;
+var ListItemUpdate = (function (_ListItem) {
+  _inherits(ListItemUpdate, _ListItem);
 
-var ListItemNew = (function (_ListItem) {
-  _inherits(ListItemNew, _ListItem);
+  function ListItemUpdate() {
+    _classCallCheck(this, ListItemUpdate);
+
+    _get(Object.getPrototypeOf(ListItemUpdate.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(ListItemUpdate, [{
+    key: 'onSave',
+    value: function onSave(data) {
+      if (typeof io !== "undefined") {
+        var identity = this.props.identity || this.props.params.identity;
+        io.socket.put("/" + identity + "/" + this.props.params.id, data, (function (res) {}).bind(this));
+      }
+    }
+  }]);
+
+  return ListItemUpdate;
+})(ListItem);
+
+exports.ListItemUpdate = ListItemUpdate;
+
+var ListItemNew = (function (_ListItem2) {
+  _inherits(ListItemNew, _ListItem2);
 
   function ListItemNew() {
     _classCallCheck(this, ListItemNew);
@@ -248,9 +256,11 @@ var List = (function (_React$Component3) {
   }, {
     key: 'getItems',
     value: function getItems(identity) {
+      var _this3 = this;
+
       if (typeof io !== "undefined") {
         io.socket.get("/admin/" + identity, (function (res) {
-          this.setState(res);
+          _this3.setState(res);
         }).bind(this));
       }
     }
@@ -753,6 +763,8 @@ exports.Nav = Nav;
 },{"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
 "use strict";
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _react = require('react');
@@ -761,14 +773,18 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
+var _pagesAdmin = require('./pages/admin');
+
+var admin = _interopRequireWildcard(_pagesAdmin);
+
 module.exports = _react2['default'].createElement(
   _reactRouter.Route,
   { handler: _reactRouter.RouteHandler },
   _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/', handler: require('./pages/home.js') }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin', path: '/admin', handler: require('./pages/admin.js').Home }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-list', path: '/admin/:identity', handler: require('./pages/admin.js').List }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-new', path: '/admin/:identity/new', handler: require('./pages/admin.js').ListItemNew }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: require('./pages/admin.js').ListItem })
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin', path: '/admin', handler: admin.Home }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-list', path: '/admin/:identity', handler: admin.List }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-new', path: '/admin/:identity/new', handler: admin.ListItemNew }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: admin.ListItemUpdate })
 );
 
-},{"./pages/admin.js":3,"./pages/home.js":4,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);
+},{"./pages/admin":3,"./pages/home.js":4,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);

@@ -12,16 +12,16 @@ export default class extends React.Component {
         <table className="table">
           <thead>
             <tr>
-            {fItem.map( (fItem) => {
+            {fItem.map( fItem => {
               return <th key={fItem.label}> {fItem.label} </th>
             })}
             </tr>
           </thead>
           <tbody>
-          {this.props.items && this.props.items.map( (item) => {
+          {this.props.items && this.props.items.map( item => {
             return (
               <tr key={item.id}>
-                {fItem.map( (it) => {
+                {fItem.map( it => {
                   return (
                     <td key={it.label}>
                       <Link to="admin-id" params={{identity:this.props.identity, id: item.id}}>

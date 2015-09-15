@@ -8,21 +8,14 @@ import AdminList from '../partials/admin-list.js'
 
 export class Home extends React.Component {
   componentWillMount() {
-    if (!this.props.identities) {
-      this.getHome();
-    }
+    this.getHome();
   }
   componentWillUpdate(props) {
-    if (!this.props.identities) {
       this.getHome();
-    }
   }
   getHome() {
-    if (typeof io !== "undefined") {
-      io.socket.get("/admin", (function(res){
-        this.setState(res)
-      }).bind(this));
-    }
+    if (typeof io !== "undefined")
+      io.socket.get("/admin", (res => { this.setState(res) }).bind(this));
   }
   render() {
     return (
@@ -33,7 +26,7 @@ export class Home extends React.Component {
   }
 }
 
-export class ListItem extends React.Component {
+class ListItem extends React.Component {
   componentWillMount() {
     if (!this.props.item)
       this.getItem(this.props.identity||this.props.params.identity);
@@ -42,29 +35,17 @@ export class ListItem extends React.Component {
     if (this.props.params.identity !== props.params.identity)
       this.getItem(props.params.identity);
   }
-  shouldComponentUpdate() {
-    console.log("rer", this.state)
-    return true;
-    // return ( !this.loading && ( this.props.formItem || (this.state && this.state.formItem) ) )
-  }
   getItem(identity) {
     this.loading = true;
     let url = (this.props.params.id) ? "/" + this.props.params.id : "/new";
     if (typeof io !== "undefined") {
-      io.socket.get("/admin/" + identity + url, (function(res){
+      io.socket.get("/admin/" + identity + url, ( res => {
         this.loading = false;
         this.setState(res);
       }).bind(this));
     }
   }
-  onSave(data) {
-    if (typeof io !== "undefined") {
-      let identity = this.props.identity||this.props.params.identity;
-      io.socket.put("/" + identity + "/" + this.props.params.id, data, (function(res){
-
-      }).bind(this));
-    }
-  }
+  onSave(data) {}
   render() {
     if (this.props.formItem || (this.state && this.state.formItem))
       var MyAdminItem = <AdminItem {...this.props} {...this.state} onSave={this.onSave.bind(this)} />;
@@ -75,11 +56,22 @@ export class ListItem extends React.Component {
     );
   }
 }
+export class ListItemUpdate extends ListItem {
+  onSave(data) {
+    if (typeof io !== "undefined") {
+      let identity = this.props.identity||this.props.params.identity;
+      io.socket.put("/" + identity + "/" + this.props.params.id, data, (res => {
+
+      }).bind(this));
+    }
+  }
+}
+
 export class ListItemNew extends ListItem {
   onSave(data) {
     if (typeof io !== "undefined") {
       let identity = this.props.identity||this.props.params.identity;
-      io.socket.post("/" + identity, data, (function(res){
+      io.socket.post("/" + identity, data, ( res => {
 
       }).bind(this));
     }
@@ -99,7 +91,7 @@ export class List extends React.Component {
   }
   getItems(identity) {
     if (typeof io !== "undefined") {
-      io.socket.get("/admin/" + identity, (function(res){
+      io.socket.get("/admin/" + identity, ( res => {
         this.setState(res)
       }).bind(this));
     }

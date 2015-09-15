@@ -3,7 +3,7 @@
 module.exports = function(def) {
   var definition = sails.models[def].definition;
   //Promise
-  return new Promise(function(resolve, reject) {
+  return new Promise( (resolve, reject) => {
     Promise.all(Object.keys(definition).map( assoc => { return prepare(def, definition[assoc], assoc); }) )
     .then( results => { resolve(results); } )
     .catch( err => { reject(err); } )
