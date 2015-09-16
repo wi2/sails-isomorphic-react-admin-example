@@ -39,8 +39,10 @@ module.exports = {
     });
   },
   list: function(req, res) {
-    sails.models[req.param('identity')].find()
-    .then( items => {
+    var query = sails.models[req.param('identity')].find()
+    if (req.param('sort'))
+      query = query.sort(req.param('sort'))
+    query.then( items => {
       getFormDefinition( req.param('identity') )
       .then( result => {
         var state = {

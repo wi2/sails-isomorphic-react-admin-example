@@ -89,17 +89,31 @@ export class List extends React.Component {
       this.getItems(props.params.identity);
     }
   }
-  getItems(identity) {
+  getItems(identity, params) {
     if (typeof io !== "undefined") {
-      io.socket.get("/admin/" + identity, ( res => {
+      io.socket.get("/admin/" + identity, params||{}, ( res => {
         this.setState(res)
       }).bind(this));
     }
   }
+  sortBy(lbl) {
+    if (!this.sort) {
+      this.sort = [lbl, 'DESC'];
+    } else {
+      if (this.sort[0] === lbl)
+        this.sort[1] = (this.sort[1] === 'ASC') ? 'DESC' : 'ASC';
+      else {
+        this.sort[0] = lbl;
+        // this.sort = [lbl, 'ASC'];
+      }
+    }
+
+    this.getItems(this.props.identity||this.props.params.identity, {sort: this.sort.join(" ")} );
+  }
   render() {
     return (
       <Layout {...this.props} {...this.state}>
-        <AdminList items={[]} {...this.props.params} {...this.props} {...this.state} />
+        <AdminList items={[]} {...this.props.params} {...this.props} {...this.state} sortBy={this.sortBy.bind(this)} />
       </Layout>
     );
   }

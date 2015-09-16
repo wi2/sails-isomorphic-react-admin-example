@@ -4,6 +4,10 @@ import React from 'react'
 import {Link} from 'react-router'
 
 export default class extends React.Component {
+  sortBy(lbl, e) {
+    e.preventDefault();
+    this.props.sortBy(lbl);
+  }
   render() {
     let fItem = this.props.formItem||[{label: 'id'}];
     return (
@@ -13,7 +17,7 @@ export default class extends React.Component {
           <thead>
             <tr>
             {fItem.map( fItem => {
-              return <th key={fItem.label}> {fItem.label} </th>
+              return <th key={fItem.label} onClick={this.sortBy.bind(this, fItem.label)}>{fItem.label}</th>
             })}
             </tr>
           </thead>

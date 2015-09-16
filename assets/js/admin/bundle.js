@@ -255,14 +255,28 @@ var List = (function (_React$Component3) {
     }
   }, {
     key: 'getItems',
-    value: function getItems(identity) {
+    value: function getItems(identity, params) {
       var _this3 = this;
 
       if (typeof io !== "undefined") {
-        io.socket.get("/admin/" + identity, (function (res) {
+        io.socket.get("/admin/" + identity, params || {}, (function (res) {
           _this3.setState(res);
         }).bind(this));
       }
+    }
+  }, {
+    key: 'sortBy',
+    value: function sortBy(lbl) {
+      if (!this.sort) {
+        this.sort = [lbl, 'DESC'];
+      } else {
+        if (this.sort[0] === lbl) this.sort[1] = this.sort[1] === 'ASC' ? 'DESC' : 'ASC';else {
+          this.sort[0] = lbl;
+          // this.sort = [lbl, 'ASC'];
+        }
+      }
+
+      this.getItems(this.props.identity || this.props.params.identity, { sort: this.sort.join(" ") });
     }
   }, {
     key: 'render',
@@ -270,7 +284,7 @@ var List = (function (_React$Component3) {
       return _react2['default'].createElement(
         _layoutJs.Layout,
         _extends({}, this.props, this.state),
-        _react2['default'].createElement(_partialsAdminListJs2['default'], _extends({ items: [] }, this.props.params, this.props, this.state))
+        _react2['default'].createElement(_partialsAdminListJs2['default'], _extends({ items: [] }, this.props.params, this.props, this.state, { sortBy: this.sortBy.bind(this) }))
       );
     }
   }]);
@@ -457,6 +471,12 @@ var _default = (function (_React$Component) {
   }
 
   _createClass(_default, [{
+    key: 'sortBy',
+    value: function sortBy(lbl, e) {
+      e.preventDefault();
+      this.props.sortBy(lbl);
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this = this;
@@ -483,10 +503,8 @@ var _default = (function (_React$Component) {
               fItem.map(function (fItem) {
                 return _react2['default'].createElement(
                   'th',
-                  { key: fItem.label },
-                  ' ',
-                  fItem.label,
-                  ' '
+                  { key: fItem.label, onClick: _this.sortBy.bind(_this, fItem.label) },
+                  fItem.label
                 );
               })
             )
