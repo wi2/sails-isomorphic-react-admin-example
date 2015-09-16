@@ -1,4 +1,4 @@
-# admin
+# Sails Isomorphic React with Admin Example
 
 a [Sails](http://sailsjs.org) application with
 - separate compiling assets for backoffice and frontoffice
@@ -10,6 +10,8 @@ a [Sails](http://sailsjs.org) application with
 ## Quick start :
 ```sh
 npm install
+
+npm install -g browserify
 
 browserify -r react -r react-router -r newforms -r newforms-bootstrap > assets/js/admin/dependencies/build.js
 
