@@ -39,7 +39,7 @@ module.exports = {
     });
   },
   list: function(req, res) {
-    var query = sails.models[req.param('identity')].find()
+    var query = sails.models[req.param('identity')].find(req.param('contain')||{})
     if (req.param('sort'))
       query = query.sort(req.param('sort'))
     query.then( items => {

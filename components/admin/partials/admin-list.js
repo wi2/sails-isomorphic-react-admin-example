@@ -8,6 +8,10 @@ export default class extends React.Component {
     e.preventDefault();
     this.props.sortBy(lbl);
   }
+  filterBy(lbl, e) {
+    e.preventDefault();
+    this.props.filterBy(lbl, e.target.value);
+  }
   render() {
     let fItem = this.props.formItem||[{label: 'id'}];
     return (
@@ -18,6 +22,15 @@ export default class extends React.Component {
             <tr>
             {fItem.map( fItem => {
               return <th key={fItem.label} onClick={this.sortBy.bind(this, fItem.label)}>{fItem.label}</th>
+            })}
+            </tr>
+            <tr>
+            {fItem.map( fItem => {
+              return (
+                <th key={fItem.label}>
+                  <input type="text" name={fItem.label} onChange={this.filterBy.bind(this, fItem.label)} />
+                </th>
+              );
             })}
             </tr>
           </thead>

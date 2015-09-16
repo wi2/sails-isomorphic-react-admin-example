@@ -265,6 +265,13 @@ var List = (function (_React$Component3) {
       }
     }
   }, {
+    key: 'filterBy',
+    value: function filterBy(lbl, val) {
+      var filter = {};
+      filter[lbl] = { contains: val };
+      this.getItems(this.props.identity || this.props.params.identity, val ? { contain: filter } : null);
+    }
+  }, {
     key: 'sortBy',
     value: function sortBy(lbl) {
       if (!this.sort) {
@@ -284,7 +291,8 @@ var List = (function (_React$Component3) {
       return _react2['default'].createElement(
         _layoutJs.Layout,
         _extends({}, this.props, this.state),
-        _react2['default'].createElement(_partialsAdminListJs2['default'], _extends({ items: [] }, this.props.params, this.props, this.state, { sortBy: this.sortBy.bind(this) }))
+        _react2['default'].createElement(_partialsAdminListJs2['default'], _extends({ items: [] }, this.props.params, this.props, this.state, {
+          sortBy: this.sortBy.bind(this), filterBy: this.filterBy.bind(this) }))
       );
     }
   }]);
@@ -477,6 +485,12 @@ var _default = (function (_React$Component) {
       this.props.sortBy(lbl);
     }
   }, {
+    key: 'filterBy',
+    value: function filterBy(lbl, e) {
+      e.preventDefault();
+      this.props.filterBy(lbl, e.target.value);
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this = this;
@@ -505,6 +519,17 @@ var _default = (function (_React$Component) {
                   'th',
                   { key: fItem.label, onClick: _this.sortBy.bind(_this, fItem.label) },
                   fItem.label
+                );
+              })
+            ),
+            _react2['default'].createElement(
+              'tr',
+              null,
+              fItem.map(function (fItem) {
+                return _react2['default'].createElement(
+                  'th',
+                  { key: fItem.label },
+                  _react2['default'].createElement('input', { type: 'text', name: fItem.label, onChange: _this.filterBy.bind(_this, fItem.label) })
                 );
               })
             )

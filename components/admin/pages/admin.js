@@ -96,6 +96,11 @@ export class List extends React.Component {
       }).bind(this));
     }
   }
+  filterBy(lbl, val) {
+    let filter = {};
+    filter[lbl] = {contains: val};
+    this.getItems(this.props.identity||this.props.params.identity, val ? {contain: filter} : null );
+  }
   sortBy(lbl) {
     if (!this.sort) {
       this.sort = [lbl, 'DESC'];
@@ -113,7 +118,8 @@ export class List extends React.Component {
   render() {
     return (
       <Layout {...this.props} {...this.state}>
-        <AdminList items={[]} {...this.props.params} {...this.props} {...this.state} sortBy={this.sortBy.bind(this)} />
+        <AdminList items={[]} {...this.props.params} {...this.props} {...this.state}
+          sortBy={this.sortBy.bind(this)} filterBy={this.filterBy.bind(this)} />
       </Layout>
     );
   }
