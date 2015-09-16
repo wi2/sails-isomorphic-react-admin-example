@@ -378,7 +378,7 @@ var _default = (function (_React$Component) {
             case 'float':
               mobj[item.label] = FloatField();break;
             case 'date':
-              mobj[item.label] = DateField();break;
+              mobj[item.label] = (0, _newforms.DateField)();break;
             case 'datetime':
               mobj[item.label] = (0, _newforms.DateTimeField)();break;
             case 'boolean':
@@ -419,7 +419,7 @@ var _default = (function (_React$Component) {
         _react2['default'].createElement(
           'h1',
           null,
-          'Commentaire'
+          this.props.identity
         ),
         _react2['default'].createElement('hr', null),
         _react2['default'].createElement(

@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react'
-import {Form, Textarea, RenderForm, CharField, EmailField, ChoiceField, DateTimeField, BooleanField, IntegerField} from 'newforms'
+import {Form, Textarea, RenderForm, CharField, EmailField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
 import * as models from './admin-models.js'
 
@@ -60,7 +60,7 @@ export default class extends React.Component {
 
     return (
       <form onSubmit={this._onSubmit.bind(this)}>
-        <h1>Commentaire</h1>
+        <h1>{this.props.identity}</h1>
         <hr />
         <p className="text-right">
           <button className="btn btn-default">Save</button>
