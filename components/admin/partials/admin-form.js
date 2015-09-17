@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react'
-import {Form, Textarea, RenderForm, CharField, EmailField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField} from 'newforms'
+import {Form, Textarea, RenderForm, CharField, EmailField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
 import * as models from './admin-models.js'
 
