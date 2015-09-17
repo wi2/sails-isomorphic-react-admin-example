@@ -8,16 +8,24 @@
 module.exports = {
 
   attributes: {
-    firstname: 'string',
-    lastname: 'string',
+    firstname: {
+      type: 'string',
+      required: true
+    },
+    lastname: {
+      type: 'string',
+      required: true
+    },
     email: {
       type: 'string',
       email: true,
-      unique: true
+      unique: true,
+      required: true
     },
     status: {
       type: 'string',
-      in: ['admin', 'member', 'visitor']
+      in: ['admin', 'member', 'visitor'],
+      defaultsTo: 'visitor'
     },
     connected: {
       type: 'boolean',
