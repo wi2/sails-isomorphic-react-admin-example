@@ -8,8 +8,16 @@
 module.exports = {
 
   attributes: {
-    name: 'string',
-    message: 'text',
+    name: {
+      type: 'string',
+      required: true,
+      maxLength: 50
+    },
+    message: {
+      type: 'text',
+      required: true,
+      minLength: 5
+    },
     post: {
       model: 'post'
     }

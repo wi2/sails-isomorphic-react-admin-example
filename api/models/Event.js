@@ -10,6 +10,10 @@ module.exports = {
   attributes: {
     title: 'string',
     content: 'text',
+    link: {
+      type: 'string',
+      url: true
+    },
     publishAt: 'date'
   }
 };
