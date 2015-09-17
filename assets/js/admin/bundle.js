@@ -362,20 +362,20 @@ var _default = (function (_React$Component) {
   }, {
     key: 'makeForm',
     value: function makeForm(formItem) {
+      var data = this.props.item || null;
       var mobj = {};
       if (formItem) {
         for (var i = 0, len = formItem.length; i < len; i++) {
           var item = formItem[i];
           if (['id', 'createdAt', 'updatedAt'].indexOf(item.label) === -1) {
             var params = { required: item.required };
-            if (item.defaultsTo) params.initial = item.defaultsTo;
+            if (item.defaultsTo || data) params.initial = data[item.label] || item.defaultsTo;
             switch (item.input) {
               case 'email':
                 mobj[item.label] = (0, _newforms.EmailField)(params);break;
-              case 'string':
-                mobj[item.label] = (0, _newforms.CharField)(params);break;
               case 'text':
                 params.widget = _newforms.Textarea;
+              case 'string':
                 mobj[item.label] = (0, _newforms.CharField)(params);break;
               case 'integer':
                 mobj[item.label] = (0, _newforms.IntegerField)(params);break;
@@ -394,17 +394,15 @@ var _default = (function (_React$Component) {
           }
         }
       }
-      var mForm = _newforms.Form.extend(mobj);
-      this.mForm = new mForm({ initial: this.props.item || {} });
+
+      this.mForm = _newforms.Form.extend(mobj);
     }
   }, {
     key: '_onSubmit',
     value: function _onSubmit(e) {
       e.preventDefault();
       var form = this.refs.mForm.getForm();
-      if (form.validate()) this.props.onSave(form.cleanedData);else {
-        console.log(form.errors().errors);
-      }
+      if (form.validate()) this.props.onSave(form.cleanedData);
     }
   }, {
     key: 'render',
@@ -413,7 +411,7 @@ var _default = (function (_React$Component) {
 
       if (models[this.props.identity]) return _react2['default'].createElement(
         'form',
-        { onSubmit: this._onSubmit.bind(this), ref: 'form' },
+        { onSubmit: this._onSubmit.bind(this) },
         _react2['default'].createElement(
           _newforms.RenderForm,
           { form: this.mForm, ref: 'mForm' },

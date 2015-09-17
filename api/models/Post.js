@@ -8,7 +8,10 @@
 module.exports = {
 
   attributes: {
-    title: 'string',
+    title: {
+      type: 'string',
+      required: true
+    },
     content: 'text',
     comments: {
       collection:'comment',
