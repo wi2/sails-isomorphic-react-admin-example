@@ -14,6 +14,7 @@ function prepare(def, data, attr) {
   var res = {label: attr};
   var validator = sails.models[def]._validator.validations[attr];
   res.input = data.type;
+  res.required = validator && validator.required ? validator.required : false;
   switch(data.type) {
     case 'array': res.input = 'checkbox'; break;
     case 'json': res.input = 'text'; break;
@@ -33,8 +34,10 @@ function prepare(def, data, attr) {
     res.in = validator.in;
     res.input = 'choice';
   }
+
   //Promise
   return new Promise( (resolve, reject) => {
+    // if it's a model association
     if (data.alias && data.model)
       sails.models[data.alias].find()
       .then( list => {
