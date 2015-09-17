@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react'
-import {Form, Textarea, ErrorList, RenderForm, CharField, EmailField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField, validators} from 'newforms'
+import {Form, Textarea, RenderForm, CharField, EmailField, URLField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
 import * as models from './admin-models.js'
 
@@ -24,11 +24,12 @@ export default class extends React.Component {
       for(let i=0,len=formItem.length; i<len; i++) {
         let item = formItem[i];
         if (['id','createdAt','updatedAt'].indexOf(item.label) === -1) {
-          let params = {required: item.required};
+          let params = item;
           if (item.defaultsTo || data)
             params.initial = data[item.label]||item.defaultsTo;
           switch(item.input) {
             case 'email':   mobj[item.label] = EmailField(params); break;
+            case 'url':     mobj[item.label] = URLField(params); break;
             case 'text':    params.widget = Textarea;
             case 'string':  mobj[item.label] = CharField(params); break;
             case 'integer': mobj[item.label] = IntegerField(params); break;
@@ -36,13 +37,13 @@ export default class extends React.Component {
             case 'date':    mobj[item.label] = DateField(params); break;
             case 'datetime':mobj[item.label] = DateTimeField(params); break;
             case 'boolean': mobj[item.label] = BooleanField(params); break;
-            case 'choice':  params.choices = item.in
+            case 'choice':  params.choices = item.in;
                             mobj[item.label] = ChoiceField(params); break;
           }
         }
       }
     }
-
+    // console.log(mobj);
     this.mForm = Form.extend(mobj);
   }
   _onSubmit(e) {

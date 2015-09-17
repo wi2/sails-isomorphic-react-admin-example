@@ -11,29 +11,46 @@ module.exports = function(def) {
 };
 
 function prepare(def, data, attr) {
-  var res = {label: attr};
-  var validator = sails.models[def]._validator.validations[attr];
+  var validator = sails.models[def]._validator.validations[attr]
+    , res = new Object(_.clone(validator));
+
+  res.label = attr;
   res.input = data.type;
-  res.required = validator && validator.required ? validator.required : false;
   switch(data.type) {
     case 'array': res.input = 'checkbox'; break;
     case 'json': res.input = 'text'; break;
   }
+  //don't use for <form>
   switch(attr) {
     case 'id':
     case 'updatedAt':
     case 'createdAt': res.disabled = true; break;
   }
+
   if (data.defaultsTo)
     res.defaultsTo = data.defaultsTo;
-  if (validator && validator.email){
-    res.input = 'email';
-    res.email = validator.email;
+
+  if (validator) {
+    if (validator.email){
+      res.input = 'email';
+      res.email = validator.email;
+    }
+    if (validator.in) {
+      res.in = validator.in;
+      res.input = 'choice';
+    }
+
+    if (validator.url)
+      res.input = 'url';
+    if (validator.min)
+      res.minValue = validator.min;
+    if (validator.max)
+      res.maxValue = validator.max;
   }
-  if (validator && validator.in) {
-    res.in = validator.in;
-    res.input = 'choice';
-  }
+
+  res.required = validator && validator.required ? validator.required : false;
+
+  // console.log("res", res);
 
   //Promise
   return new Promise( (resolve, reject) => {

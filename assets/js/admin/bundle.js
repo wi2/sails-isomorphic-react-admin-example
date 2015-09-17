@@ -368,11 +368,13 @@ var _default = (function (_React$Component) {
         for (var i = 0, len = formItem.length; i < len; i++) {
           var item = formItem[i];
           if (['id', 'createdAt', 'updatedAt'].indexOf(item.label) === -1) {
-            var params = { required: item.required };
+            var params = item;
             if (item.defaultsTo || data) params.initial = data[item.label] || item.defaultsTo;
             switch (item.input) {
               case 'email':
                 mobj[item.label] = (0, _newforms.EmailField)(params);break;
+              case 'url':
+                mobj[item.label] = (0, _newforms.URLField)(params);break;
               case 'text':
                 params.widget = _newforms.Textarea;
               case 'string':
@@ -394,7 +396,7 @@ var _default = (function (_React$Component) {
           }
         }
       }
-
+      // console.log(mobj);
       this.mForm = _newforms.Form.extend(mobj);
     }
   }, {
