@@ -42,6 +42,15 @@ function prepare(def, data, attr) {
 
     if (validator.url)
       res.input = 'url';
+    else if (validator.urlish)
+      res.input = 'urlish';
+    else if (validator.alphanumericdashed)
+      res.input = 'slug';
+    else if (validator.ipv4)
+      res.input = 'ipv4';
+    else if (validator.ipv6)
+      res.input = 'ipv6';
+
     if (validator.min)
       res.minValue = validator.min;
     if (validator.max)

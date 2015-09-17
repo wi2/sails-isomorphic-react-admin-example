@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react'
-import {Form, Textarea, RenderForm, CharField, EmailField, URLField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField} from 'newforms'
+import {Form, Textarea, RenderForm, CharField, SlugField, EmailField, URLField, FilePathField, GenericIPAddressField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
 import * as models from './admin-models.js'
 
@@ -30,8 +30,12 @@ export default class extends React.Component {
           switch(item.input) {
             case 'email':   mobj[item.label] = EmailField(params); break;
             case 'url':     mobj[item.label] = URLField(params); break;
+            case 'urlish':  mobj[item.label] = FilePathField(params); break;
+            case 'ipv4':    mobj[item.label] = GenericIPAddressField(params, 'ipv4'); break;
+            case 'ipv6':    mobj[item.label] = GenericIPAddressField(params, 'ipv6'); break;
             case 'text':    params.widget = Textarea;
             case 'string':  mobj[item.label] = CharField(params); break;
+            case 'slug':    mobj[item.label] = SlugField(params); break;
             case 'integer': mobj[item.label] = IntegerField(params); break;
             case 'float':   mobj[item.label] = FloatField(params); break;
             case 'date':    mobj[item.label] = DateField(params); break;

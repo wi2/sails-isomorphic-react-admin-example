@@ -9,7 +9,7 @@ Router.run(require('./routes.js'), Router.HistoryLocation, function (Root) {
   delete window.__ReactInitState__;
 });
 
-},{"./routes.js":8,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./routes.js":9,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -50,7 +50,7 @@ var Layout = (function () {
 
 exports.Layout = Layout;
 
-},{"./partials/nav.js":7,"react":"react"}],3:[function(require,module,exports){
+},{"./partials/nav.js":8,"react":"react"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -375,10 +375,18 @@ var _default = (function (_React$Component) {
                 mobj[item.label] = (0, _newforms.EmailField)(params);break;
               case 'url':
                 mobj[item.label] = (0, _newforms.URLField)(params);break;
+              case 'urlish':
+                mobj[item.label] = (0, _newforms.FilePathField)(params);break;
+              case 'ipv4':
+                mobj[item.label] = (0, _newforms.GenericIPAddressField)(params, 'ipv4');break;
+              case 'ipv6':
+                mobj[item.label] = (0, _newforms.GenericIPAddressField)(params, 'ipv6');break;
               case 'text':
                 params.widget = _newforms.Textarea;
               case 'string':
                 mobj[item.label] = (0, _newforms.CharField)(params);break;
+              case 'slug':
+                mobj[item.label] = (0, _newforms.SlugField)(params);break;
               case 'integer':
                 mobj[item.label] = (0, _newforms.IntegerField)(params);break;
               case 'float':
@@ -651,6 +659,39 @@ exports.post = post;
 },{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],7:[function(require,module,exports){
 "use strict";
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _newformsBootstrap = require('newforms-bootstrap');
+
+var MultiEmailField = _newformsBootstrap.Field.extend({
+  /**
+   * Normalise data to a list of strings.
+   */
+  toJavaScript: function toJavaScript(value) {
+    // Return an empty list if no input was given
+    if (this.isEmptyValue(value)) {
+      return [];
+    }
+    return value.split(/, ?/g);
+  },
+
+  /**
+   * Check if value consists only of valid emails.
+   */
+  validate: function validate(value) {
+    // Use the parent's handling of required fields, etc.
+    MultiEmailField.__super__.validate.call(this, value);
+    value.map(forms.validators.validateEmail);
+  }
+});
+
+},{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],8:[function(require,module,exports){
+"use strict";
+
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -750,7 +791,7 @@ var Nav = (function () {
 
 exports.Nav = Nav;
 
-},{"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
 "use strict";
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -776,4 +817,4 @@ module.exports = _react2['default'].createElement(
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: admin.ListItemUpdate })
 );
 
-},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8]);
+},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);

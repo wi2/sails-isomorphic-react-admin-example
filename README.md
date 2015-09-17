@@ -12,7 +12,6 @@ with
 - [react-router](https://github.com/rackt/react-router)
 - [newforms](https://github.com/insin/newforms)
 - [newforms-bootstrap](https://github.com/insin/newforms-bootstrap)
-
 - [browserify](https://github.com/substack/node-browserify)
 - [sails-hook-babel](https://github.com/artificialio/sails-hook-babel)
 
