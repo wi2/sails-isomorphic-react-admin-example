@@ -366,25 +366,31 @@ var _default = (function (_React$Component) {
       if (formItem) {
         for (var i = 0, len = formItem.length; i < len; i++) {
           var item = formItem[i];
-          if (['id', 'createdAt', 'updatedAt'].indexOf(item.label) === -1) switch (item.input) {
-            case 'email':
-              mobj[item.label] = (0, _newforms.EmailField)();break;
-            case 'string':
-              mobj[item.label] = (0, _newforms.CharField)();break;
-            case 'text':
-              mobj[item.label] = (0, _newforms.CharField)({ widget: _newforms.Textarea });break;
-            case 'integer':
-              mobj[item.label] = (0, _newforms.IntegerField)();break;
-            case 'float':
-              mobj[item.label] = FloatField();break;
-            case 'date':
-              mobj[item.label] = (0, _newforms.DateField)();break;
-            case 'datetime':
-              mobj[item.label] = (0, _newforms.DateTimeField)();break;
-            case 'boolean':
-              mobj[item.label] = (0, _newforms.BooleanField)({ required: false });break;
-            case 'choice':
-              mobj[item.label] = (0, _newforms.ChoiceField)({ choices: item['in'] });break;
+          if (['id', 'createdAt', 'updatedAt'].indexOf(item.label) === -1) {
+            var params = { required: item.required };
+            if (item.defaultsTo) params.initial = item.defaultsTo;
+            switch (item.input) {
+              case 'email':
+                mobj[item.label] = (0, _newforms.EmailField)(params);break;
+              case 'string':
+                mobj[item.label] = (0, _newforms.CharField)(params);break;
+              case 'text':
+                params.widget = _newforms.Textarea;
+                mobj[item.label] = (0, _newforms.CharField)(params);break;
+              case 'integer':
+                mobj[item.label] = (0, _newforms.IntegerField)(params);break;
+              case 'float':
+                mobj[item.label] = (0, _newforms.FloatField)(params);break;
+              case 'date':
+                mobj[item.label] = (0, _newforms.DateField)(params);break;
+              case 'datetime':
+                mobj[item.label] = (0, _newforms.DateTimeField)(params);break;
+              case 'boolean':
+                mobj[item.label] = (0, _newforms.BooleanField)(params);break;
+              case 'choice':
+                params.choices = item['in'];
+                mobj[item.label] = (0, _newforms.ChoiceField)(params);break;
+            }
           }
         }
       }
@@ -396,7 +402,9 @@ var _default = (function (_React$Component) {
     value: function _onSubmit(e) {
       e.preventDefault();
       var form = this.refs.mForm.getForm();
-      if (form.validate()) this.props.onSave(form.cleanedData);
+      if (form.validate()) this.props.onSave(form.cleanedData);else {
+        console.log(form.errors().errors);
+      }
     }
   }, {
     key: 'render',
@@ -405,7 +413,7 @@ var _default = (function (_React$Component) {
 
       if (models[this.props.identity]) return _react2['default'].createElement(
         'form',
-        { onSubmit: this._onSubmit.bind(this) },
+        { onSubmit: this._onSubmit.bind(this), ref: 'form' },
         _react2['default'].createElement(
           _newforms.RenderForm,
           { form: this.mForm, ref: 'mForm' },
