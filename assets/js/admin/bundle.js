@@ -9,7 +9,7 @@ Router.run(require('./routes.js'), Router.HistoryLocation, function (Root) {
   delete window.__ReactInitState__;
 });
 
-},{"./routes.js":8,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./routes.js":9,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -50,7 +50,7 @@ var Layout = (function () {
 
 exports.Layout = Layout;
 
-},{"./partials/nav.js":7,"react":"react"}],3:[function(require,module,exports){
+},{"./partials/nav.js":8,"react":"react"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -95,21 +95,11 @@ var Home = (function (_React$Component) {
   _createClass(Home, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      this.getHome();
-    }
-  }, {
-    key: 'componentWillUpdate',
-    value: function componentWillUpdate(props) {
-      this.getHome();
-    }
-  }, {
-    key: 'getHome',
-    value: function getHome() {
       var _this = this;
 
-      if (typeof io !== "undefined") io.socket.get("/admin", (function (res) {
+      if (typeof io !== "undefined") io.socket.get("/admin", function (res) {
         _this.setState(res);
-      }).bind(this));
+      });
     }
   }, {
     key: 'render',
@@ -158,10 +148,10 @@ var ListItem = (function (_React$Component2) {
       this.loading = true;
       var url = this.props.params.id ? "/" + this.props.params.id : "/new";
       if (typeof io !== "undefined") {
-        io.socket.get("/admin/" + identity + url, (function (res) {
+        io.socket.get("/admin/" + identity + url, function (res) {
           _this2.loading = false;
           _this2.setState(res);
-        }).bind(this));
+        });
       }
     }
   }, {
@@ -181,8 +171,27 @@ var ListItem = (function (_React$Component2) {
             reader.readAsDataURL(data[tmp.label]);
           } else _this3.multipart(data, binaries, cb);
         })();
-      } else {
-        cb(data);
+      } else cb(data);
+    }
+  }, {
+    key: 'saving',
+    value: function saving(data, url, cb) {
+      if (typeof io !== "undefined") {
+        if (typeof url === 'function') {
+          cb = url;
+          url = "";
+        }
+        var identity = this.props.identity || this.props.params.identity,
+            fItem = this.props.formItem;
+        if (this.state && this.state.formItem) fItem = this.state.formItem;
+        var binaries = fItem.filter(function (a) {
+          return a.type === 'binary';
+        });
+        this.multipart(data, binaries, function (result) {
+          io.socket.post("/" + identity + url, result, function (res) {
+            if (cb) cb(res);
+          });
+        });
       }
     }
   }, {
@@ -215,21 +224,9 @@ var ListItemUpdate = (function (_ListItem) {
   _createClass(ListItemUpdate, [{
     key: 'onSave',
     value: function onSave(data) {
-      var _this4 = this;
-
-      if (typeof io !== "undefined") {
-        var identity = this.props.identity || this.props.params.identity,
-            fItem = this.props.formItem;
-        if (this.state && this.state.formItem) fItem = this.state.formItem;
-        var binaries = fItem.filter(function (a) {
-          return a.type === 'binary';
-        });
-        this.multipart(data, binaries, function (result) {
-          io.socket.post("/" + identity + "/" + _this4.props.params.id, result, (function (res) {
-            console.log('Success..');
-          }).bind(_this4));
-        });
-      }
+      this.saving(data, "/" + this.props.params.id, function (res) {
+        console.log(res);
+      });
     }
   }]);
 
@@ -250,21 +247,9 @@ var ListItemNew = (function (_ListItem2) {
   _createClass(ListItemNew, [{
     key: 'onSave',
     value: function onSave(data) {
-      var _this5 = this;
-
-      if (typeof io !== "undefined") {
-        var identity = this.props.identity || this.props.params.identity,
-            fItem = this.props.formItem;
-        if (this.state && this.state.formItem) fItem = this.state.formItem;
-        var binaries = fItem.filter(function (a) {
-          return a.type === 'binary';
-        });
-        this.multipart(data, binaries, function (result) {
-          io.socket.post("/" + identity, result, (function (res) {
-            console.log('Success..');
-          }).bind(_this5));
-        });
-      }
+      this.saving(data, function (res) {
+        console.log(res);
+      });
     }
   }]);
 
@@ -299,12 +284,12 @@ var List = (function (_React$Component3) {
   }, {
     key: 'getItems',
     value: function getItems(identity, params) {
-      var _this6 = this;
+      var _this4 = this;
 
       if (typeof io !== "undefined") {
-        io.socket.get("/admin/" + identity, params || {}, (function (res) {
-          _this6.setState(res);
-        }).bind(this));
+        io.socket.get("/admin/" + identity, params || {}, function (res) {
+          _this4.setState(res);
+        });
       }
     }
   }, {
@@ -320,11 +305,8 @@ var List = (function (_React$Component3) {
       if (!this.sort) {
         this.sort = [lbl, 'DESC'];
       } else {
-        if (this.sort[0] === lbl) this.sort[1] = this.sort[1] === 'ASC' ? 'DESC' : 'ASC';else {
-          this.sort[0] = lbl; // this.sort = [lbl, 'ASC'];
-        }
+        if (this.sort[0] === lbl) this.sort[1] = this.sort[1] === 'ASC' ? 'DESC' : 'ASC';else this.sort[0] = lbl; // this.sort = [lbl, 'ASC'];
       }
-
       this.getItems(this.props.identity || this.props.params.identity, { sort: this.sort.join(" ") });
     }
   }, {
@@ -762,6 +744,36 @@ exports.image = image;
 },{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],7:[function(require,module,exports){
 "use strict";
 
+// "use strict";
+
+// import React from 'react'
+// import {Field} from 'newforms-bootstrap'
+
+// var MultiEmailField = Field.extend({
+//   /**
+//    * Normalise data to a list of strings.
+//    */
+//   toJavaScript: function(value) {
+//     // Return an empty list if no input was given
+//     if (this.isEmptyValue(value)) {
+//       return []
+//     }
+//     return value.split(/, ?/g)
+//   },
+
+//   /**
+//    * Check if value consists only of valid emails.
+//    */
+//   validate: function(value) {
+//     // Use the parent's handling of required fields, etc.
+//     MultiEmailField.__super__.validate.call(this, value)
+//     value.map(forms.validators.validateEmail)
+//   }
+// });
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -861,7 +873,7 @@ var Nav = (function () {
 
 exports.Nav = Nav;
 
-},{"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
 "use strict";
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -887,4 +899,4 @@ module.exports = _react2['default'].createElement(
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: admin.ListItemUpdate })
 );
 
-},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8]);
+},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);

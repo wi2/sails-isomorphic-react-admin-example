@@ -10,7 +10,7 @@ import routes from '../../components/admin/routes'
 module.exports = {
   home: function(req, res) {
     var state = {identities: Object.keys(sails.models)};
-    renderTo(routes, req.isSocket, res, '/', {title:'Administration - Home'}, state);
+    renderTo(routes, req.wantsJSON, res, '/', {title:'Administration - Home'}, state);
   },
   new: function(req, res) {
     getFormDefinition( req.param('identity') )
@@ -20,7 +20,7 @@ module.exports = {
         identities: Object.keys(sails.models),
         formItem: result
       };
-      renderTo(routes, req.isSocket, res, '/admin/'+req.param('identity')+'/new', {title:'Administration - create record'}, state);
+      renderTo(routes, req.wantsJSON, res, '/admin/'+req.param('identity')+'/new', {title:'Administration - create record'}, state);
     })
   },
   update: function(req, res) {
@@ -34,7 +34,7 @@ module.exports = {
           formItem: result,
           item: item
         };
-        renderTo(routes, req.isSocket, res, '/admin/'+req.param('identity')+'/'+req.param('id'), {title:'Administration - update record'}, state);
+        renderTo(routes, req.wantsJSON, res, '/admin/'+req.param('identity')+'/'+req.param('id'), {title:'Administration - update record'}, state);
       });
     });
   },
@@ -51,7 +51,7 @@ module.exports = {
           formItem: result,
           items: items
         };
-        renderTo(routes, req.isSocket, res, '/admin/'+req.param('identity'), {title:'Administration - List'}, state);
+        renderTo(routes, req.wantsJSON, res, '/admin/'+req.param('identity'), {title:'Administration - List'}, state);
       });
     });
   }

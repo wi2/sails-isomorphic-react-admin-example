@@ -8,14 +8,8 @@ import AdminList from '../partials/admin-list.js'
 
 export class Home extends React.Component {
   componentWillMount() {
-    this.getHome();
-  }
-  componentWillUpdate(props) {
-      this.getHome();
-  }
-  getHome() {
     if (typeof io !== "undefined")
-      io.socket.get("/admin", (res => { this.setState(res) }).bind(this));
+      io.socket.get("/admin", (res => { this.setState(res) }));
   }
   render() {
     return (
@@ -42,7 +36,7 @@ class ListItem extends React.Component {
       io.socket.get("/admin/" + identity + url, ( res => {
         this.loading = false;
         this.setState(res);
-      }).bind(this));
+      }));
     }
   }
 
@@ -58,11 +52,25 @@ class ListItem extends React.Component {
         reader.readAsDataURL(data[tmp.label]);
       } else
         this.multipart(data, binaries, cb);
-    } else {
+    } else
       cb(data);
+  }
+  saving(data, url, cb) {
+    if (typeof io !== "undefined") {
+      if (typeof url === 'function') {
+        cb = url;
+        url = "";
+      }
+      var identity = this.props.identity||this.props.params.identity
+        , fItem = this.props.formItem;
+      if (this.state && this.state.formItem)
+        fItem = this.state.formItem;
+      var binaries = fItem.filter( a => { return a.type === 'binary' } );
+      this.multipart(data, binaries, result => {
+        io.socket.post("/" + identity + url, result, ( res => { if (cb) cb(res); }))
+      });
     }
   }
-
   onSave(data) {}
   render() {
     if (this.props.formItem || (this.state && this.state.formItem))
@@ -76,35 +84,13 @@ class ListItem extends React.Component {
 }
 export class ListItemUpdate extends ListItem {
   onSave(data) {
-    if (typeof io !== "undefined") {
-      var identity = this.props.identity||this.props.params.identity
-        , fItem = this.props.formItem;
-      if (this.state && this.state.formItem)
-        fItem = this.state.formItem;
-      var binaries = fItem.filter( a => { return a.type === 'binary' } );
-      this.multipart(data, binaries, (result) => {
-        io.socket.post("/" + identity + "/" + this.props.params.id, result, ( res => {
-          console.log('Success..');
-        }).bind(this))
-      });
-    }
+    this.saving(data, "/" + this.props.params.id, res => { console.log(res); });
   }
 }
 
 export class ListItemNew extends ListItem {
   onSave(data) {
-    if (typeof io !== "undefined") {
-      var identity = this.props.identity||this.props.params.identity
-        , fItem = this.props.formItem;
-      if (this.state && this.state.formItem)
-        fItem = this.state.formItem;
-      var binaries = fItem.filter( a => { return a.type === 'binary' } );
-      this.multipart(data, binaries, (result) => {
-        io.socket.post("/" + identity, result, ( res => {
-          console.log('Success..');
-        }).bind(this))
-      });
-    }
+    this.saving(data, res => { console.log(res); });
   }
 }
 
@@ -123,7 +109,7 @@ export class List extends React.Component {
     if (typeof io !== "undefined") {
       io.socket.get("/admin/" + identity, params||{}, ( res => {
         this.setState(res)
-      }).bind(this));
+      }));
     }
   }
   filterBy(lbl, val) {
@@ -137,11 +123,9 @@ export class List extends React.Component {
     } else {
       if (this.sort[0] === lbl)
         this.sort[1] = (this.sort[1] === 'ASC') ? 'DESC' : 'ASC';
-      else {
+      else
         this.sort[0] = lbl; // this.sort = [lbl, 'ASC'];
-      }
     }
-
     this.getItems(this.props.identity||this.props.params.identity, {sort: this.sort.join(" ")} );
   }
   render() {
