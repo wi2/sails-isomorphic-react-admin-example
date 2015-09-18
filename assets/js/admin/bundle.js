@@ -609,11 +609,17 @@ var _default = (function (_React$Component) {
                 'tr',
                 { key: item.id },
                 fItem.map(function (it) {
-                  if (it.type === 'binary') return _react2['default'].createElement(
-                    'td',
-                    { key: it.label },
-                    _react2['default'].createElement('img', { src: item[it.label] || 'data:image/png;base64,null' })
-                  );else if (it.type === 'boolean') return _react2['default'].createElement(
+                  if (it.type === 'binary') {
+                    if (!item[it.label]) return _react2['default'].createElement('td', { key: it.label });else if (item[it.label].split("/")[0] === 'data:image') return _react2['default'].createElement(
+                      'td',
+                      { key: it.label },
+                      _react2['default'].createElement('img', { src: item[it.label] || 'data:image/png;base64,null' })
+                    );else return _react2['default'].createElement(
+                      'td',
+                      { key: it.label },
+                      'A link'
+                    );
+                  } else if (it.type === 'boolean') return _react2['default'].createElement(
                     'td',
                     { key: it.label },
                     item[it.label] ? 'true' : 'false'

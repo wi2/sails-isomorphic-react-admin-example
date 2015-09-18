@@ -42,9 +42,14 @@ export default class extends React.Component {
             return (
               <tr key={item.id}>
                 {fItem.map( it => {
-                  if (it.type === 'binary' )
-                    return <td key={it.label}><img src={item[it.label]||'data:image/png;base64,null'} /></td>
-                  else if (it.type === 'boolean' )
+                  if (it.type === 'binary' ) {
+                    if (!item[it.label])
+                      return <td key={it.label} />
+                    else if (item[it.label].split("/")[0] === 'data:image')
+                      return <td key={it.label}><img src={item[it.label]||'data:image/png;base64,null'} /></td>
+                    else
+                      return <td key={it.label}>A link</td>
+                  } else if (it.type === 'boolean' )
                     return <td key={it.label}>{item[it.label]?'true':'false'}</td>
                   else
                     return <td key={it.label}>{item[it.label]||'-'}</td>
