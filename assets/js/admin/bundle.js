@@ -584,7 +584,8 @@ var _default = (function (_React$Component) {
                   { key: fItem.label, onClick: _this.sortBy.bind(_this, fItem.label) },
                   fItem.label
                 );
-              })
+              }),
+              _react2['default'].createElement('th', null)
             ),
             _react2['default'].createElement(
               'tr',
@@ -595,13 +596,15 @@ var _default = (function (_React$Component) {
                   { key: fItem.label },
                   _react2['default'].createElement('input', { type: 'text', name: fItem.label, onChange: _this.filterBy.bind(_this, fItem.label) })
                 );
-              })
+              }),
+              _react2['default'].createElement('th', null)
             )
           ),
           _react2['default'].createElement(
             'tbody',
             null,
             this.props.items && this.props.items.map(function (item) {
+              var URLparams = { identity: _this.props.identity, id: item.id };
               return _react2['default'].createElement(
                 'tr',
                 { key: item.id },
@@ -610,16 +613,25 @@ var _default = (function (_React$Component) {
                     'td',
                     { key: it.label },
                     _react2['default'].createElement('img', { src: item[it.label] || 'data:image/png;base64,null' })
+                  );else if (it.type === 'boolean') return _react2['default'].createElement(
+                    'td',
+                    { key: it.label },
+                    item[it.label] ? 'true' : 'false'
                   );else return _react2['default'].createElement(
                     'td',
                     { key: it.label },
-                    _react2['default'].createElement(
-                      _reactRouter.Link,
-                      { to: 'admin-id', params: { identity: _this.props.identity, id: item.id } },
-                      item[it.label] || '-'
-                    )
+                    item[it.label] || '-'
                   );
-                })
+                }),
+                _react2['default'].createElement(
+                  'td',
+                  null,
+                  _react2['default'].createElement(
+                    _reactRouter.Link,
+                    { to: 'admin-id', params: URLparams },
+                    'Edit'
+                  )
+                )
               );
             })
           )

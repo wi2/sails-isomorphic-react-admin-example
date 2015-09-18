@@ -23,6 +23,7 @@ export default class extends React.Component {
             {fItem.map( fItem => {
               return <th key={fItem.label} onClick={this.sortBy.bind(this, fItem.label)}>{fItem.label}</th>
             })}
+              <th />
             </tr>
             <tr>
             {fItem.map( fItem => {
@@ -32,28 +33,23 @@ export default class extends React.Component {
                 </th>
               );
             })}
+              <th />
             </tr>
           </thead>
           <tbody>
           {this.props.items && this.props.items.map( item => {
+            let URLparams = {identity:this.props.identity, id: item.id};
             return (
               <tr key={item.id}>
                 {fItem.map( it => {
                   if (it.type === 'binary' )
-                    return (
-                      <td key={it.label}>
-                        <img src={item[it.label]||'data:image/png;base64,null'} />
-                      </td>
-                    )
+                    return <td key={it.label}><img src={item[it.label]||'data:image/png;base64,null'} /></td>
+                  else if (it.type === 'boolean' )
+                    return <td key={it.label}>{item[it.label]?'true':'false'}</td>
                   else
-                    return (
-                      <td key={it.label}>
-                        <Link to="admin-id" params={{identity:this.props.identity, id: item.id}}>
-                          {item[it.label]||'-'}
-                        </Link>
-                      </td>
-                    )
+                    return <td key={it.label}>{item[it.label]||'-'}</td>
                 })}
+                <td><Link to="admin-id" params={URLparams}>Edit</Link></td>
               </tr>
             );
           })}
