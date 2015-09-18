@@ -9,7 +9,7 @@ Router.run(require('./routes.js'), Router.HistoryLocation, function (Root) {
   delete window.__ReactInitState__;
 });
 
-},{"./routes.js":9,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./routes.js":8,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -50,7 +50,7 @@ var Layout = (function () {
 
 exports.Layout = Layout;
 
-},{"./partials/nav.js":8,"react":"react"}],3:[function(require,module,exports){
+},{"./partials/nav.js":7,"react":"react"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -165,6 +165,27 @@ var ListItem = (function (_React$Component2) {
       }
     }
   }, {
+    key: 'multipart',
+    value: function multipart(data, binaries, cb) {
+      var _this3 = this;
+
+      if (binaries.length) {
+        (function () {
+          var tmp = binaries.pop();
+          if (data[tmp.label] instanceof Blob) {
+            var reader = new FileReader();
+            reader.onload = function (upload) {
+              data[tmp.label] = upload.target.result;
+              _this3.multipart(data, binaries, cb);
+            };
+            reader.readAsDataURL(data[tmp.label]);
+          } else _this3.multipart(data, binaries, cb);
+        })();
+      } else {
+        cb(data);
+      }
+    }
+  }, {
     key: 'onSave',
     value: function onSave(data) {}
   }, {
@@ -194,9 +215,20 @@ var ListItemUpdate = (function (_ListItem) {
   _createClass(ListItemUpdate, [{
     key: 'onSave',
     value: function onSave(data) {
+      var _this4 = this;
+
       if (typeof io !== "undefined") {
-        var identity = this.props.identity || this.props.params.identity;
-        io.socket.put("/" + identity + "/" + this.props.params.id, data, (function (res) {}).bind(this));
+        var identity = this.props.identity || this.props.params.identity,
+            fItem = this.props.formItem;
+        if (this.state && this.state.formItem) fItem = this.state.formItem;
+        var binaries = fItem.filter(function (a) {
+          return a.type === 'binary';
+        });
+        this.multipart(data, binaries, function (result) {
+          io.socket.post("/" + identity + "/" + _this4.props.params.id, result, (function (res) {
+            console.log('Success..');
+          }).bind(_this4));
+        });
       }
     }
   }]);
@@ -218,9 +250,20 @@ var ListItemNew = (function (_ListItem2) {
   _createClass(ListItemNew, [{
     key: 'onSave',
     value: function onSave(data) {
+      var _this5 = this;
+
       if (typeof io !== "undefined") {
-        var identity = this.props.identity || this.props.params.identity;
-        io.socket.post("/" + identity, data, (function (res) {}).bind(this));
+        var identity = this.props.identity || this.props.params.identity,
+            fItem = this.props.formItem;
+        if (this.state && this.state.formItem) fItem = this.state.formItem;
+        var binaries = fItem.filter(function (a) {
+          return a.type === 'binary';
+        });
+        this.multipart(data, binaries, function (result) {
+          io.socket.post("/" + identity, result, (function (res) {
+            console.log('Success..');
+          }).bind(_this5));
+        });
       }
     }
   }]);
@@ -256,11 +299,11 @@ var List = (function (_React$Component3) {
   }, {
     key: 'getItems',
     value: function getItems(identity, params) {
-      var _this3 = this;
+      var _this6 = this;
 
       if (typeof io !== "undefined") {
         io.socket.get("/admin/" + identity, params || {}, (function (res) {
-          _this3.setState(res);
+          _this6.setState(res);
         }).bind(this));
       }
     }
@@ -278,8 +321,7 @@ var List = (function (_React$Component3) {
         this.sort = [lbl, 'DESC'];
       } else {
         if (this.sort[0] === lbl) this.sort[1] = this.sort[1] === 'ASC' ? 'DESC' : 'ASC';else {
-          this.sort[0] = lbl;
-          // this.sort = [lbl, 'ASC'];
+          this.sort[0] = lbl; // this.sort = [lbl, 'ASC'];
         }
       }
 
@@ -369,8 +411,13 @@ var _default = (function (_React$Component) {
           var item = formItem[i];
           if (['id', 'createdAt', 'updatedAt'].indexOf(item.label) === -1) {
             var params = item;
-            if (item.defaultsTo || data) params.initial = data[item.label] || item.defaultsTo;
+
+            if (data && data[item.label]) params.initial = data[item.label];else if (item.defaultsTo) params.initial = item.defaultsTo;
+            delete params.defaultsTo;
+
             switch (item.input) {
+              case 'binary':
+                mobj[item.label] = (0, _newforms.FileField)(params);break;
               case 'email':
                 mobj[item.label] = (0, _newforms.EmailField)(params);break;
               case 'url':
@@ -405,6 +452,7 @@ var _default = (function (_React$Component) {
         }
       }
       // console.log(mobj);
+      // mobj['image'] = ImageField();
       this.mForm = _newforms.Form.extend(mobj);
     }
   }, {
@@ -421,7 +469,7 @@ var _default = (function (_React$Component) {
 
       if (models[this.props.identity]) return _react2['default'].createElement(
         'form',
-        { onSubmit: this._onSubmit.bind(this) },
+        { onSubmit: this._onSubmit.bind(this), encType: 'multipart/form-data' },
         _react2['default'].createElement(
           _newforms.RenderForm,
           { form: this.mForm, ref: 'mForm' },
@@ -431,7 +479,7 @@ var _default = (function (_React$Component) {
 
       return _react2['default'].createElement(
         'form',
-        { onSubmit: this._onSubmit.bind(this) },
+        { onSubmit: this._onSubmit.bind(this), encType: 'multipart/form-data' },
         _react2['default'].createElement(
           'h1',
           null,
@@ -558,7 +606,11 @@ var _default = (function (_React$Component) {
                 'tr',
                 { key: item.id },
                 fItem.map(function (it) {
-                  return _react2['default'].createElement(
+                  if (it.type === 'binary') return _react2['default'].createElement(
+                    'td',
+                    { key: it.label },
+                    _react2['default'].createElement('img', { src: item[it.label] || 'data:image/png;base64,null' })
+                  );else return _react2['default'].createElement(
                     'td',
                     { key: it.label },
                     _react2['default'].createElement(
@@ -654,42 +706,42 @@ var post = _react2['default'].createElement(
     _react2['default'].createElement(_newformsBootstrap.Field, { name: 'content' })
   )
 );
+
 exports.post = post;
+var image = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'Image'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title' })
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'small', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'medium', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'big' })
+  )
+);
+exports.image = image;
 
 },{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],7:[function(require,module,exports){
-"use strict";
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _newformsBootstrap = require('newforms-bootstrap');
-
-var MultiEmailField = _newformsBootstrap.Field.extend({
-  /**
-   * Normalise data to a list of strings.
-   */
-  toJavaScript: function toJavaScript(value) {
-    // Return an empty list if no input was given
-    if (this.isEmptyValue(value)) {
-      return [];
-    }
-    return value.split(/, ?/g);
-  },
-
-  /**
-   * Check if value consists only of valid emails.
-   */
-  validate: function validate(value) {
-    // Use the parent's handling of required fields, etc.
-    MultiEmailField.__super__.validate.call(this, value);
-    value.map(forms.validators.validateEmail);
-  }
-});
-
-},{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -791,7 +843,7 @@ var Nav = (function () {
 
 exports.Nav = Nav;
 
-},{"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -817,4 +869,4 @@ module.exports = _react2['default'].createElement(
   _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: admin.ListItemUpdate })
 );
 
-},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);
+},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8]);

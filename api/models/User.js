@@ -8,6 +8,9 @@
 module.exports = {
 
   attributes: {
+    avatar: {
+      type: 'binary'
+    },
     firstname: {
       type: 'string',
       required: true
@@ -31,6 +34,15 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     }
+  },
+  beforeCreate: function(values, cb) {
+    console.log(values);
+    cb();
+  },
+  afterCreate: function(values, cb) {
+    console.log(values);
+    console.log("after");
+    cb();
   }
 };
 

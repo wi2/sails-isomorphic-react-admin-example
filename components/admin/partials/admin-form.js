@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react'
-import {Form, Textarea, RenderForm, CharField, SlugField, EmailField, URLField, FilePathField, GenericIPAddressField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField} from 'newforms'
+import {Form, Textarea, RenderForm, CharField, SlugField, EmailField, URLField, FilePathField, GenericIPAddressField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField, FileField, MultipleFileField, ImageField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
 import * as models from './admin-models.js'
 
@@ -25,9 +25,15 @@ export default class extends React.Component {
         let item = formItem[i];
         if (['id','createdAt','updatedAt'].indexOf(item.label) === -1) {
           let params = item;
-          if (item.defaultsTo || data)
-            params.initial = data[item.label]||item.defaultsTo;
+
+          if (data && data[item.label])
+            params.initial = data[item.label];
+          else if (item.defaultsTo)
+            params.initial = item.defaultsTo;
+          delete params.defaultsTo;
+
           switch(item.input) {
+            case 'binary':  mobj[item.label] = FileField(params); break;
             case 'email':   mobj[item.label] = EmailField(params); break;
             case 'url':     mobj[item.label] = URLField(params); break;
             case 'urlish':  mobj[item.label] = FilePathField(params); break;
@@ -48,6 +54,7 @@ export default class extends React.Component {
       }
     }
     // console.log(mobj);
+    // mobj['image'] = ImageField();
     this.mForm = Form.extend(mobj);
   }
   _onSubmit(e) {
@@ -62,7 +69,7 @@ export default class extends React.Component {
 
     if (models[this.props.identity])
       return (
-        <form onSubmit={this._onSubmit.bind(this)}>
+        <form onSubmit={this._onSubmit.bind(this)} encType="multipart/form-data">
           <RenderForm form={this.mForm} ref="mForm">
             {models[this.props.identity]}
           </RenderForm>
@@ -70,7 +77,7 @@ export default class extends React.Component {
       );
 
     return (
-      <form onSubmit={this._onSubmit.bind(this)}>
+      <form onSubmit={this._onSubmit.bind(this)} encType="multipart/form-data">
         <h1>{this.props.identity}</h1>
         <hr />
         <p className="text-right">

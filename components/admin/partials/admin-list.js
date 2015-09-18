@@ -39,13 +39,20 @@ export default class extends React.Component {
             return (
               <tr key={item.id}>
                 {fItem.map( it => {
-                  return (
-                    <td key={it.label}>
-                      <Link to="admin-id" params={{identity:this.props.identity, id: item.id}}>
-                        {item[it.label]||'-'}
-                      </Link>
-                    </td>
-                  )
+                  if (it.type === 'binary' )
+                    return (
+                      <td key={it.label}>
+                        <img src={item[it.label]||'data:image/png;base64,null'} />
+                      </td>
+                    )
+                  else
+                    return (
+                      <td key={it.label}>
+                        <Link to="admin-id" params={{identity:this.props.identity, id: item.id}}>
+                          {item[it.label]||'-'}
+                        </Link>
+                      </td>
+                    )
                 })}
               </tr>
             );

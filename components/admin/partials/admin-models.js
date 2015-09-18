@@ -33,3 +33,21 @@ export const post = (
     </Row>
   </Container>
 );
+
+export const image = (
+  <Container autoColumns="md">
+    <h1>Image</h1>
+    <hr />
+    <p className="text-right">
+      <button className="btn btn-default">Save</button>
+    </p>
+    <Row>
+      <Field name="title" />
+    </Row>
+    <Row>
+      <Field name="small" md="4" />
+      <Field name="medium" md="4" />
+      <Field name="big"/>
+    </Row>
+  </Container>
+);

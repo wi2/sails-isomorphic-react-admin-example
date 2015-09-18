@@ -3,7 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application with isomorphic and a separate administration(automatic & extendable)",
-  "keywords": ["sails","react","isomorphic","administration","automatic","admin"],
+  "keywords": [
+    "sails",
+    "react",
+    "isomorphic",
+    "administration",
+    "automatic",
+    "admin"
+  ],
   "dependencies": {
     "babelify": "^6.3.0",
     "ejs": "~0.8.4",

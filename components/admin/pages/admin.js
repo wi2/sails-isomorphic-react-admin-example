@@ -45,6 +45,24 @@ class ListItem extends React.Component {
       }).bind(this));
     }
   }
+
+  multipart(data, binaries, cb) {
+    if (binaries.length) {
+      let tmp = binaries.pop();
+      if (data[tmp.label] instanceof Blob) {
+        let reader = new FileReader();
+        reader.onload = (upload) => {
+          data[tmp.label] = upload.target.result;
+          this.multipart(data, binaries, cb);
+        };
+        reader.readAsDataURL(data[tmp.label]);
+      } else
+        this.multipart(data, binaries, cb);
+    } else {
+      cb(data);
+    }
+  }
+
   onSave(data) {}
   render() {
     if (this.props.formItem || (this.state && this.state.formItem))
@@ -59,10 +77,16 @@ class ListItem extends React.Component {
 export class ListItemUpdate extends ListItem {
   onSave(data) {
     if (typeof io !== "undefined") {
-      let identity = this.props.identity||this.props.params.identity;
-      io.socket.put("/" + identity + "/" + this.props.params.id, data, (res => {
-
-      }).bind(this));
+      var identity = this.props.identity||this.props.params.identity
+        , fItem = this.props.formItem;
+      if (this.state && this.state.formItem)
+        fItem = this.state.formItem;
+      var binaries = fItem.filter( a => { return a.type === 'binary' } );
+      this.multipart(data, binaries, (result) => {
+        io.socket.post("/" + identity + "/" + this.props.params.id, result, ( res => {
+          console.log('Success..');
+        }).bind(this))
+      });
     }
   }
 }
@@ -70,10 +94,16 @@ export class ListItemUpdate extends ListItem {
 export class ListItemNew extends ListItem {
   onSave(data) {
     if (typeof io !== "undefined") {
-      let identity = this.props.identity||this.props.params.identity;
-      io.socket.post("/" + identity, data, ( res => {
-
-      }).bind(this));
+      var identity = this.props.identity||this.props.params.identity
+        , fItem = this.props.formItem;
+      if (this.state && this.state.formItem)
+        fItem = this.state.formItem;
+      var binaries = fItem.filter( a => { return a.type === 'binary' } );
+      this.multipart(data, binaries, (result) => {
+        io.socket.post("/" + identity, result, ( res => {
+          console.log('Success..');
+        }).bind(this))
+      });
     }
   }
 }
@@ -108,8 +138,7 @@ export class List extends React.Component {
       if (this.sort[0] === lbl)
         this.sort[1] = (this.sort[1] === 'ASC') ? 'DESC' : 'ASC';
       else {
-        this.sort[0] = lbl;
-        // this.sort = [lbl, 'ASC'];
+        this.sort[0] = lbl; // this.sort = [lbl, 'ASC'];
       }
     }
 
