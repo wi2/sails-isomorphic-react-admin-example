@@ -230,7 +230,7 @@ var _default = (function () {
               null,
               _react2['default'].createElement(
                 _reactRouter.Link,
-                { to: 'admin' },
+                { to: 'home' },
                 'Administration'
               )
             ),
@@ -254,7 +254,7 @@ var _default = (function () {
                     null,
                     _react2['default'].createElement(
                       _reactRouter.Link,
-                      { to: 'admin-list', params: { identity: identity } },
+                      { to: 'list', params: { identity: identity } },
                       'List'
                     )
                   ),
@@ -263,7 +263,7 @@ var _default = (function () {
                     null,
                     _react2['default'].createElement(
                       _reactRouter.Link,
-                      { to: 'admin-new', params: { identity: identity } },
+                      { to: 'create', params: { identity: identity } },
                       'Create'
                     )
                   )
@@ -852,7 +852,7 @@ var _default = (function (_React$Component) {
                   null,
                   _react2['default'].createElement(
                     _reactRouter.Link,
-                    { to: 'admin-id', params: URLparams },
+                    { to: 'update', params: URLparams },
                     'Edit'
                   )
                 )
@@ -995,7 +995,7 @@ var _default = (function () {
               null,
               _react2['default'].createElement(
                 _reactRouter.Link,
-                { to: 'admin' },
+                { to: 'home' },
                 'Admin'
               )
             ),
@@ -1019,7 +1019,7 @@ var _default = (function () {
                     null,
                     _react2['default'].createElement(
                       _reactRouter.Link,
-                      { to: 'admin-list', params: { identity: identity } },
+                      { to: 'list', params: { identity: identity } },
                       'List'
                     )
                   ),
@@ -1028,7 +1028,7 @@ var _default = (function () {
                     null,
                     _react2['default'].createElement(
                       _reactRouter.Link,
-                      { to: 'admin-new', params: { identity: identity } },
+                      { to: 'create', params: { identity: identity } },
                       'Create'
                     )
                   )
@@ -1063,10 +1063,10 @@ var _pagesAdmin = require('./pages/admin');
 module.exports = _react2['default'].createElement(
   _reactRouter.Route,
   { handler: _reactRouter.RouteHandler },
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin', path: '/admin', handler: _pagesAdmin.Home }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-list', path: '/admin/:identity', handler: _pagesAdmin.List }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-new', path: '/admin/:identity/new', handler: _pagesAdmin.Create }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: _pagesAdmin.Update })
+  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/admin', handler: _pagesAdmin.Home }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: '/admin/:identity', handler: _pagesAdmin.List }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'create', path: '/admin/:identity/new', handler: _pagesAdmin.Create }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'update', path: '/admin/:identity/:id', handler: _pagesAdmin.Update })
 );
 
 },{"./pages/admin":5,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9,10,11]);

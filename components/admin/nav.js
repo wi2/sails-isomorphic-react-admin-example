@@ -14,7 +14,7 @@ export default class {
               <a href="/">Accueil</a>
             </li>
             <li>
-              <Link to="admin">Administration</Link>
+              <Link to="home">Administration</Link>
             </li>
             {identities && identities.map( identity => {
               return (
@@ -27,10 +27,10 @@ export default class {
                   </a>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link to="admin-list" params={{identity}}>List</Link>
+                      <Link to="list" params={{identity}}>List</Link>
                     </li>
                     <li>
-                      <Link to="admin-new" params={{identity}}>Create</Link>
+                      <Link to="create" params={{identity}}>Create</Link>
                     </li>
                   </ul>
                 </li>

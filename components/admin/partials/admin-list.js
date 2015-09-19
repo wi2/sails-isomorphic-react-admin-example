@@ -54,7 +54,7 @@ export default class extends React.Component {
                   else
                     return <td key={it.label}>{item[it.label]||'-'}</td>
                 })}
-                <td><Link to="admin-id" params={URLparams}>Edit</Link></td>
+                <td><Link to="update" params={URLparams}>Edit</Link></td>
               </tr>
             );
           })}
