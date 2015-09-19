@@ -5,7 +5,7 @@ import {Container, Row, Field} from 'newforms-bootstrap'
 
 export const comment = (
   <Container autoColumns="md">
-    <h1>Commentaire</h1>
+    <h1>special Commentaire</h1>
     <hr />
     <p className="text-right">
       <button className="btn btn-default">Save</button>
@@ -22,7 +22,7 @@ export const comment = (
 
 export const post = (
   <Container autoColumns="md">
-    <h1>Article</h1>
+    <h1>special Article</h1>
     <hr />
     <p className="text-right">
       <button className="btn btn-default">Save</button>
@@ -36,7 +36,7 @@ export const post = (
 
 export const image = (
   <Container autoColumns="md">
-    <h1>Image</h1>
+    <h1>special Image</h1>
     <hr />
     <p className="text-right">
       <button className="btn btn-default">Save</button>

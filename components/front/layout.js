@@ -1,9 +1,9 @@
 "use strict";
 
 import React from 'react'
-import {Nav} from './partials/nav.js'
+import Nav from './partials/nav'
 
-export class Layout {
+export default class {
   render() {
     return (
       <div>

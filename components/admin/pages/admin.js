@@ -1,9 +1,9 @@
 "use strict";
 
 import React from 'react'
-import {Layout} from '../layout.js'
-import AdminItem from '../partials/admin-form.js'
-import AdminList from '../partials/admin-list.js'
+import DefaultLayout from '../partials/layout'
+import AdForm from '../partials/admin-form'
+import AdList from '../partials/admin-list'
 
 
 export class Home extends React.Component {
@@ -12,15 +12,16 @@ export class Home extends React.Component {
       io.socket.get("/admin", (res => { this.setState(res) }));
   }
   render() {
+    let CurrentLayout = this.props.layout||DefaultLayout;
     return (
-      <Layout {...this.props} {...this.state}>
+      <CurrentLayout {...this.props} {...this.state}>
         <h1>ADMIN: HomePage</h1>
-      </Layout>
+      </CurrentLayout>
     );
   }
 }
 
-class ListItem extends React.Component {
+class FormItem extends React.Component {
   componentWillMount() {
     if (!this.props.item)
       this.getItem(this.props.identity||this.props.params.identity);
@@ -73,22 +74,28 @@ class ListItem extends React.Component {
   }
   onSave(data) {}
   render() {
+    let CurrentLayout = this.props.layout||DefaultLayout;
+    let modelForm;
+    if (this.props.models) {
+      let identity = this.props.identity||this.props.params.identity;
+      modelForm = this.props.models[identity];
+    }
     if (this.props.formItem || (this.state && this.state.formItem))
-      var MyAdminItem = <AdminItem {...this.props} {...this.state} onSave={this.onSave.bind(this)} />;
+      var CurrentAdForm = <AdForm {...this.props} {...this.state} onSave={this.onSave.bind(this)} modelForm={modelForm} />;
     return (
-      <Layout {...this.props} {...this.state}>
-        {MyAdminItem||''}
-      </Layout>
+      <CurrentLayout {...this.props} {...this.state}>
+        {CurrentAdForm||''}
+      </CurrentLayout>
     );
   }
 }
-export class ListItemUpdate extends ListItem {
+export class Update extends FormItem {
   onSave(data) {
     this.saving(data, "/" + this.props.params.id, res => { console.log(res); });
   }
 }
 
-export class ListItemNew extends ListItem {
+export class Create extends FormItem {
   onSave(data) {
     this.saving(data, res => { console.log(res); });
   }
@@ -129,11 +136,12 @@ export class List extends React.Component {
     this.getItems(this.props.identity||this.props.params.identity, {sort: this.sort.join(" ")} );
   }
   render() {
+    let CurrentLayout = this.props.layout||DefaultLayout;
     return (
-      <Layout {...this.props} {...this.state}>
-        <AdminList items={[]} {...this.props.params} {...this.props} {...this.state}
+      <CurrentLayout {...this.props} {...this.state}>
+        <AdList items={[]} {...this.props.params} {...this.props} {...this.state}
           sortBy={this.sortBy.bind(this)} filterBy={this.filterBy.bind(this)} />
-      </Layout>
+      </CurrentLayout>
     );
   }
 }

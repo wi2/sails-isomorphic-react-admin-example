@@ -3,7 +3,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 
-export class Nav {
+export default class {
   render() {
     let identities = this.props.identities;
     return (
@@ -11,10 +11,10 @@ export class Nav {
         <div className="container">
           <ul className="nav navbar-nav">
             <li>
-              <Link to="home">Home</Link>
+              <Link to="home">Accueil</Link>
             </li>
             <li>
-              <a href="/admin">Admin</a>
+              <a href="/admin">Mon Admin</a>
             </li>
           </ul>
         </div>

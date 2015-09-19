@@ -11,10 +11,10 @@ export default class {
         <div className="container">
           <ul className="nav navbar-nav">
             <li>
-              <a href="/">Home</a>
+              <a href="/">Accueil</a>
             </li>
             <li>
-              <Link to="admin">Admin</Link>
+              <Link to="admin">Administration</Link>
             </li>
             {identities && identities.map( identity => {
               return (

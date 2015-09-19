@@ -1,15 +1,141 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var React = require('react'),
-    Router = require('react-router');
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-Router.run(require('./routes.js'), Router.HistoryLocation, function (Root) {
-  React.render(React.createElement(Root, window.__ReactInitState__), document.body);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _reactRouter2 = _interopRequireDefault(_reactRouter);
+
+var _layout = require('./layout');
+
+var _layout2 = _interopRequireDefault(_layout);
+
+var _forms = require('./forms');
+
+var modelsForm = _interopRequireWildcard(_forms);
+
+_reactRouter2['default'].run(require('./routes'), _reactRouter.HistoryLocation, function (Root) {
+  _react2['default'].render(_react2['default'].createElement(Root, _extends({}, window.__ReactInitState__, { layout: _layout2['default'], models: modelsForm })), document.body);
   delete window.__ReactInitState__;
 });
 
-},{"./routes.js":9,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./forms":2,"./layout":3,"./routes":11,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _newformsBootstrap = require('newforms-bootstrap');
+
+var comment = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'special Commentaire'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'name', md: '8' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'post' })
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'message' })
+  )
+);
+
+exports.comment = comment;
+var post = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'special Article'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'content' })
+  )
+);
+
+exports.post = post;
+var image = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'special Image'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title' })
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'small', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'medium', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'big' })
+  )
+);
+exports.image = image;
+
+},{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -26,31 +152,137 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _partialsNavJs = require('./partials/nav.js');
+var _nav = require('./nav');
 
-var Layout = (function () {
-  function Layout() {
-    _classCallCheck(this, Layout);
+var _nav2 = _interopRequireDefault(_nav);
+
+var _default = (function () {
+  function _default() {
+    _classCallCheck(this, _default);
   }
 
-  _createClass(Layout, [{
+  _createClass(_default, [{
     key: 'render',
     value: function render() {
       return _react2['default'].createElement(
         'div',
         null,
-        _react2['default'].createElement(_partialsNavJs.Nav, this.props),
+        _react2['default'].createElement(_nav2['default'], this.props),
         this.props.children
       );
     }
   }]);
 
-  return Layout;
+  return _default;
 })();
 
-exports.Layout = Layout;
+exports['default'] = _default;
+module.exports = exports['default'];
 
-},{"./partials/nav.js":8,"react":"react"}],3:[function(require,module,exports){
+},{"./nav":4,"react":"react"}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _default = (function () {
+  function _default() {
+    _classCallCheck(this, _default);
+  }
+
+  _createClass(_default, [{
+    key: 'render',
+    value: function render() {
+      var identities = this.props.identities;
+      return _react2['default'].createElement(
+        'nav',
+        { className: 'navbar navbar-default navbar-fixed-top' },
+        _react2['default'].createElement(
+          'div',
+          { className: 'container' },
+          _react2['default'].createElement(
+            'ul',
+            { className: 'nav navbar-nav' },
+            _react2['default'].createElement(
+              'li',
+              null,
+              _react2['default'].createElement(
+                'a',
+                { href: '/' },
+                'Accueil'
+              )
+            ),
+            _react2['default'].createElement(
+              'li',
+              null,
+              _react2['default'].createElement(
+                _reactRouter.Link,
+                { to: 'admin' },
+                'Administration'
+              )
+            ),
+            identities && identities.map(function (identity) {
+              return _react2['default'].createElement(
+                'li',
+                { className: 'dropdown', key: identity },
+                _react2['default'].createElement(
+                  'a',
+                  { href: '#', className: 'dropdown-toggle',
+                    'data-toggle': 'dropdown', role: 'button',
+                    'aria-haspopup': 'true', 'aria-expanded': 'false' },
+                  identity,
+                  _react2['default'].createElement('span', { className: 'caret' })
+                ),
+                _react2['default'].createElement(
+                  'ul',
+                  { className: 'dropdown-menu' },
+                  _react2['default'].createElement(
+                    'li',
+                    null,
+                    _react2['default'].createElement(
+                      _reactRouter.Link,
+                      { to: 'admin-list', params: { identity: identity } },
+                      'List'
+                    )
+                  ),
+                  _react2['default'].createElement(
+                    'li',
+                    null,
+                    _react2['default'].createElement(
+                      _reactRouter.Link,
+                      { to: 'admin-new', params: { identity: identity } },
+                      'Create'
+                    )
+                  )
+                )
+              );
+            })
+          )
+        )
+      );
+    }
+  }]);
+
+  return _default;
+})();
+
+exports['default'] = _default;
+module.exports = exports['default'];
+
+},{"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -73,15 +305,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _layoutJs = require('../layout.js');
+var _partialsLayout = require('../partials/layout');
 
-var _partialsAdminFormJs = require('../partials/admin-form.js');
+var _partialsLayout2 = _interopRequireDefault(_partialsLayout);
 
-var _partialsAdminFormJs2 = _interopRequireDefault(_partialsAdminFormJs);
+var _partialsAdminForm = require('../partials/admin-form');
 
-var _partialsAdminListJs = require('../partials/admin-list.js');
+var _partialsAdminForm2 = _interopRequireDefault(_partialsAdminForm);
 
-var _partialsAdminListJs2 = _interopRequireDefault(_partialsAdminListJs);
+var _partialsAdminList = require('../partials/admin-list');
+
+var _partialsAdminList2 = _interopRequireDefault(_partialsAdminList);
 
 var Home = (function (_React$Component) {
   _inherits(Home, _React$Component);
@@ -104,8 +338,9 @@ var Home = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var CurrentLayout = this.props.layout || _partialsLayout2['default'];
       return _react2['default'].createElement(
-        _layoutJs.Layout,
+        CurrentLayout,
         _extends({}, this.props, this.state),
         _react2['default'].createElement(
           'h1',
@@ -121,16 +356,16 @@ var Home = (function (_React$Component) {
 
 exports.Home = Home;
 
-var ListItem = (function (_React$Component2) {
-  _inherits(ListItem, _React$Component2);
+var FormItem = (function (_React$Component2) {
+  _inherits(FormItem, _React$Component2);
 
-  function ListItem() {
-    _classCallCheck(this, ListItem);
+  function FormItem() {
+    _classCallCheck(this, FormItem);
 
-    _get(Object.getPrototypeOf(ListItem.prototype), 'constructor', this).apply(this, arguments);
+    _get(Object.getPrototypeOf(FormItem.prototype), 'constructor', this).apply(this, arguments);
   }
 
-  _createClass(ListItem, [{
+  _createClass(FormItem, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
       if (!this.props.item) this.getItem(this.props.identity || this.props.params.identity);
@@ -200,28 +435,34 @@ var ListItem = (function (_React$Component2) {
   }, {
     key: 'render',
     value: function render() {
-      if (this.props.formItem || this.state && this.state.formItem) var MyAdminItem = _react2['default'].createElement(_partialsAdminFormJs2['default'], _extends({}, this.props, this.state, { onSave: this.onSave.bind(this) }));
+      var CurrentLayout = this.props.layout || _partialsLayout2['default'];
+      var modelForm = undefined;
+      if (this.props.models) {
+        var identity = this.props.identity || this.props.params.identity;
+        modelForm = this.props.models[identity];
+      }
+      if (this.props.formItem || this.state && this.state.formItem) var CurrentAdForm = _react2['default'].createElement(_partialsAdminForm2['default'], _extends({}, this.props, this.state, { onSave: this.onSave.bind(this), modelForm: modelForm }));
       return _react2['default'].createElement(
-        _layoutJs.Layout,
+        CurrentLayout,
         _extends({}, this.props, this.state),
-        MyAdminItem || ''
+        CurrentAdForm || ''
       );
     }
   }]);
 
-  return ListItem;
+  return FormItem;
 })(_react2['default'].Component);
 
-var ListItemUpdate = (function (_ListItem) {
-  _inherits(ListItemUpdate, _ListItem);
+var Update = (function (_FormItem) {
+  _inherits(Update, _FormItem);
 
-  function ListItemUpdate() {
-    _classCallCheck(this, ListItemUpdate);
+  function Update() {
+    _classCallCheck(this, Update);
 
-    _get(Object.getPrototypeOf(ListItemUpdate.prototype), 'constructor', this).apply(this, arguments);
+    _get(Object.getPrototypeOf(Update.prototype), 'constructor', this).apply(this, arguments);
   }
 
-  _createClass(ListItemUpdate, [{
+  _createClass(Update, [{
     key: 'onSave',
     value: function onSave(data) {
       this.saving(data, "/" + this.props.params.id, function (res) {
@@ -230,21 +471,21 @@ var ListItemUpdate = (function (_ListItem) {
     }
   }]);
 
-  return ListItemUpdate;
-})(ListItem);
+  return Update;
+})(FormItem);
 
-exports.ListItemUpdate = ListItemUpdate;
+exports.Update = Update;
 
-var ListItemNew = (function (_ListItem2) {
-  _inherits(ListItemNew, _ListItem2);
+var Create = (function (_FormItem2) {
+  _inherits(Create, _FormItem2);
 
-  function ListItemNew() {
-    _classCallCheck(this, ListItemNew);
+  function Create() {
+    _classCallCheck(this, Create);
 
-    _get(Object.getPrototypeOf(ListItemNew.prototype), 'constructor', this).apply(this, arguments);
+    _get(Object.getPrototypeOf(Create.prototype), 'constructor', this).apply(this, arguments);
   }
 
-  _createClass(ListItemNew, [{
+  _createClass(Create, [{
     key: 'onSave',
     value: function onSave(data) {
       this.saving(data, function (res) {
@@ -253,10 +494,10 @@ var ListItemNew = (function (_ListItem2) {
     }
   }]);
 
-  return ListItemNew;
-})(ListItem);
+  return Create;
+})(FormItem);
 
-exports.ListItemNew = ListItemNew;
+exports.Create = Create;
 
 var List = (function (_React$Component3) {
   _inherits(List, _React$Component3);
@@ -312,10 +553,11 @@ var List = (function (_React$Component3) {
   }, {
     key: 'render',
     value: function render() {
+      var CurrentLayout = this.props.layout || _partialsLayout2['default'];
       return _react2['default'].createElement(
-        _layoutJs.Layout,
+        CurrentLayout,
         _extends({}, this.props, this.state),
-        _react2['default'].createElement(_partialsAdminListJs2['default'], _extends({ items: [] }, this.props.params, this.props, this.state, {
+        _react2['default'].createElement(_partialsAdminList2['default'], _extends({ items: [] }, this.props.params, this.props, this.state, {
           sortBy: this.sortBy.bind(this), filterBy: this.filterBy.bind(this) }))
       );
     }
@@ -326,7 +568,7 @@ var List = (function (_React$Component3) {
 
 exports.List = List;
 
-},{"../layout.js":2,"../partials/admin-form.js":4,"../partials/admin-list.js":5,"react":"react"}],4:[function(require,module,exports){
+},{"../partials/admin-form":6,"../partials/admin-list":7,"../partials/layout":9,"react":"react"}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -336,8 +578,6 @@ Object.defineProperty(exports, '__esModule', {
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -354,10 +594,6 @@ var _newforms = require('newforms');
 var _newformsBootstrap = require('newforms-bootstrap');
 
 var _newformsBootstrap2 = _interopRequireDefault(_newformsBootstrap);
-
-var _adminModelsJs = require('./admin-models.js');
-
-var models = _interopRequireWildcard(_adminModelsJs);
 
 var _default = (function (_React$Component) {
   _inherits(_default, _React$Component);
@@ -449,13 +685,13 @@ var _default = (function (_React$Component) {
     value: function render() {
       if (!this.mForm) return _react2['default'].createElement('form', null);
 
-      if (models[this.props.identity]) return _react2['default'].createElement(
+      if (this.props.modelForm) return _react2['default'].createElement(
         'form',
         { onSubmit: this._onSubmit.bind(this), encType: 'multipart/form-data' },
         _react2['default'].createElement(
           _newforms.RenderForm,
           { form: this.mForm, ref: 'mForm' },
-          models[this.props.identity]
+          this.props.modelForm
         )
       );
 
@@ -492,7 +728,7 @@ var _default = (function (_React$Component) {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"./admin-models.js":6,"newforms":"newforms","newforms-bootstrap":"newforms-bootstrap","react":"react"}],5:[function(require,module,exports){
+},{"newforms":"newforms","newforms-bootstrap":"newforms-bootstrap","react":"react"}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -634,114 +870,7 @@ var _default = (function (_React$Component) {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"react":"react","react-router":"react-router"}],6:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _newformsBootstrap = require('newforms-bootstrap');
-
-var comment = _react2['default'].createElement(
-  _newformsBootstrap.Container,
-  { autoColumns: 'md' },
-  _react2['default'].createElement(
-    'h1',
-    null,
-    'Commentaire'
-  ),
-  _react2['default'].createElement('hr', null),
-  _react2['default'].createElement(
-    'p',
-    { className: 'text-right' },
-    _react2['default'].createElement(
-      'button',
-      { className: 'btn btn-default' },
-      'Save'
-    )
-  ),
-  _react2['default'].createElement(
-    _newformsBootstrap.Row,
-    null,
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'name', md: '8' }),
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'post' })
-  ),
-  _react2['default'].createElement(
-    _newformsBootstrap.Row,
-    null,
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'message' })
-  )
-);
-
-exports.comment = comment;
-var post = _react2['default'].createElement(
-  _newformsBootstrap.Container,
-  { autoColumns: 'md' },
-  _react2['default'].createElement(
-    'h1',
-    null,
-    'Article'
-  ),
-  _react2['default'].createElement('hr', null),
-  _react2['default'].createElement(
-    'p',
-    { className: 'text-right' },
-    _react2['default'].createElement(
-      'button',
-      { className: 'btn btn-default' },
-      'Save'
-    )
-  ),
-  _react2['default'].createElement(
-    _newformsBootstrap.Row,
-    null,
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title', md: '4' }),
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'content' })
-  )
-);
-
-exports.post = post;
-var image = _react2['default'].createElement(
-  _newformsBootstrap.Container,
-  { autoColumns: 'md' },
-  _react2['default'].createElement(
-    'h1',
-    null,
-    'Image'
-  ),
-  _react2['default'].createElement('hr', null),
-  _react2['default'].createElement(
-    'p',
-    { className: 'text-right' },
-    _react2['default'].createElement(
-      'button',
-      { className: 'btn btn-default' },
-      'Save'
-    )
-  ),
-  _react2['default'].createElement(
-    _newformsBootstrap.Row,
-    null,
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title' })
-  ),
-  _react2['default'].createElement(
-    _newformsBootstrap.Row,
-    null,
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'small', md: '4' }),
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'medium', md: '4' }),
-    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'big' })
-  )
-);
-exports.image = image;
-
-},{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],7:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
 // "use strict";
@@ -771,7 +900,51 @@ exports.image = image;
 //   }
 // });
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _nav = require('./nav');
+
+var _nav2 = _interopRequireDefault(_nav);
+
+var _default = (function () {
+  function _default() {
+    _classCallCheck(this, _default);
+  }
+
+  _createClass(_default, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        null,
+        _react2['default'].createElement(_nav2['default'], this.props),
+        this.props.children
+      );
+    }
+  }]);
+
+  return _default;
+})();
+
+exports['default'] = _default;
+module.exports = exports['default'];
+
+},{"./nav":10,"react":"react"}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -790,12 +963,12 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var Nav = (function () {
-  function Nav() {
-    _classCallCheck(this, Nav);
+var _default = (function () {
+  function _default() {
+    _classCallCheck(this, _default);
   }
 
-  _createClass(Nav, [{
+  _createClass(_default, [{
     key: 'render',
     value: function render() {
       var identities = this.props.identities;
@@ -868,15 +1041,14 @@ var Nav = (function () {
     }
   }]);
 
-  return Nav;
+  return _default;
 })();
 
-exports.Nav = Nav;
+exports['default'] = _default;
+module.exports = exports['default'];
 
-},{"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],11:[function(require,module,exports){
 "use strict";
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -888,15 +1060,13 @@ var _reactRouter = require('react-router');
 
 var _pagesAdmin = require('./pages/admin');
 
-var admin = _interopRequireWildcard(_pagesAdmin);
-
 module.exports = _react2['default'].createElement(
   _reactRouter.Route,
   { handler: _reactRouter.RouteHandler },
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin', path: '/admin', handler: admin.Home }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-list', path: '/admin/:identity', handler: admin.List }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-new', path: '/admin/:identity/new', handler: admin.ListItemNew }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: admin.ListItemUpdate })
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin', path: '/admin', handler: _pagesAdmin.Home }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-list', path: '/admin/:identity', handler: _pagesAdmin.List }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-new', path: '/admin/:identity/new', handler: _pagesAdmin.Create }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'admin-id', path: '/admin/:identity/:id', handler: _pagesAdmin.Update })
 );
 
-},{"./pages/admin":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9]);
+},{"./pages/admin":5,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9,10,11]);

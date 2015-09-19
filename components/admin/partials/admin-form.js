@@ -3,7 +3,6 @@
 import React from 'react'
 import {Form, Textarea, RenderForm, CharField, SlugField, EmailField, URLField, FilePathField, GenericIPAddressField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField, FileField, MultipleFileField, ImageField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
-import * as models from './admin-models.js'
 
 export default class extends React.Component {
   componentWillMount() {
@@ -67,11 +66,11 @@ export default class extends React.Component {
     if (!this.mForm)
       return <form />;
 
-    if (models[this.props.identity])
+    if (this.props.modelForm)
       return (
         <form onSubmit={this._onSubmit.bind(this)} encType="multipart/form-data">
           <RenderForm form={this.mForm} ref="mForm">
-            {models[this.props.identity]}
+            {this.props.modelForm}
           </RenderForm>
         </form>
       );

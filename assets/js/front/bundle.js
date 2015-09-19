@@ -1,15 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var React = require('react'),
-    Router = require('react-router');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-Router.run(require('./routes.js'), Router.HistoryLocation, function (Root) {
-  React.render(React.createElement(Root, window.__ReactInitState__), document.body);
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _reactRouter2 = _interopRequireDefault(_reactRouter);
+
+_reactRouter2['default'].run(require('./routes'), _reactRouter.HistoryLocation, function (Root) {
+  _react2['default'].render(_react2['default'].createElement(Root, window.__ReactInitState__), document.body);
   delete window.__ReactInitState__;
 });
 
-},{"./routes.js":5,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./routes":5,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -26,31 +33,34 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _partialsNavJs = require('./partials/nav.js');
+var _partialsNav = require('./partials/nav');
 
-var Layout = (function () {
-  function Layout() {
-    _classCallCheck(this, Layout);
+var _partialsNav2 = _interopRequireDefault(_partialsNav);
+
+var _default = (function () {
+  function _default() {
+    _classCallCheck(this, _default);
   }
 
-  _createClass(Layout, [{
+  _createClass(_default, [{
     key: 'render',
     value: function render() {
       return _react2['default'].createElement(
         'div',
         null,
-        _react2['default'].createElement(_partialsNavJs.Nav, this.props),
+        _react2['default'].createElement(_partialsNav2['default'], this.props),
         this.props.children
       );
     }
   }]);
 
-  return Layout;
+  return _default;
 })();
 
-exports.Layout = Layout;
+exports['default'] = _default;
+module.exports = exports['default'];
 
-},{"./partials/nav.js":4,"react":"react"}],3:[function(require,module,exports){
+},{"./partials/nav":4,"react":"react"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -73,7 +83,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _layoutJs = require('../layout.js');
+var _layout = require('../layout');
+
+var _layout2 = _interopRequireDefault(_layout);
 
 var _default = (function (_React$Component) {
   _inherits(_default, _React$Component);
@@ -88,7 +100,7 @@ var _default = (function (_React$Component) {
     key: 'render',
     value: function render() {
       return _react2['default'].createElement(
-        _layoutJs.Layout,
+        _layout2['default'],
         _extends({}, this.props, this.state),
         _react2['default'].createElement(
           'h1',
@@ -105,7 +117,7 @@ var _default = (function (_React$Component) {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"../layout.js":2,"react":"react"}],4:[function(require,module,exports){
+},{"../layout":2,"react":"react"}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -124,12 +136,12 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var Nav = (function () {
-  function Nav() {
-    _classCallCheck(this, Nav);
+var _default = (function () {
+  function _default() {
+    _classCallCheck(this, _default);
   }
 
-  _createClass(Nav, [{
+  _createClass(_default, [{
     key: 'render',
     value: function render() {
       var identities = this.props.identities;
@@ -148,7 +160,7 @@ var Nav = (function () {
               _react2['default'].createElement(
                 _reactRouter.Link,
                 { to: 'home' },
-                'Home'
+                'Accueil'
               )
             ),
             _react2['default'].createElement(
@@ -157,7 +169,7 @@ var Nav = (function () {
               _react2['default'].createElement(
                 'a',
                 { href: '/admin' },
-                'Admin'
+                'Mon Admin'
               )
             )
           )
@@ -166,10 +178,11 @@ var Nav = (function () {
     }
   }]);
 
-  return Nav;
+  return _default;
 })();
 
-exports.Nav = Nav;
+exports['default'] = _default;
+module.exports = exports['default'];
 
 },{"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
 "use strict";
@@ -185,7 +198,7 @@ var _reactRouter = require('react-router');
 module.exports = _react2['default'].createElement(
   _reactRouter.Route,
   { handler: _reactRouter.RouteHandler },
-  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/', handler: require('./pages/home.js') })
+  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/', handler: require('./pages/home') })
 );
 
-},{"./pages/home.js":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5]);
+},{"./pages/home":3,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5]);
