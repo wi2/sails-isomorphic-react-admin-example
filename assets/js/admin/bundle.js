@@ -842,24 +842,10 @@ var _default = (function (_React$Component) {
                 'tr',
                 { key: item.id },
                 fItem.map(function (it) {
-                  if (it.type === 'binary') {
-                    if (!item[it.label]) return _react2['default'].createElement('td', { key: it.label });else if (item[it.label].split("/")[0] === 'data:image') return _react2['default'].createElement(
-                      'td',
-                      { key: it.label },
-                      _react2['default'].createElement('img', { src: item[it.label] || 'data:image/png;base64,null' })
-                    );else return _react2['default'].createElement(
-                      'td',
-                      { key: it.label },
-                      'A link'
-                    );
-                  } else if (it.type === 'boolean') return _react2['default'].createElement(
+                  return _react2['default'].createElement(
                     'td',
                     { key: it.label },
-                    item[it.label] ? 'true' : 'false'
-                  );else return _react2['default'].createElement(
-                    'td',
-                    { key: it.label },
-                    item[it.label] || '-'
+                    _react2['default'].createElement(Content, { item: item[it.label], type: it.type })
                   );
                 }),
                 _react2['default'].createElement(
@@ -883,6 +869,45 @@ var _default = (function (_React$Component) {
 })(_react2['default'].Component);
 
 exports['default'] = _default;
+
+var Content = (function (_React$Component2) {
+  _inherits(Content, _React$Component2);
+
+  function Content() {
+    _classCallCheck(this, Content);
+
+    _get(Object.getPrototypeOf(Content.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Content, [{
+    key: 'render',
+    value: function render() {
+      var item = this.props.item;
+      if (this.props.type === 'binary') {
+        if (!item) return _react2['default'].createElement('span', null);else if (item.split("/")[0] === 'data:image') return _react2['default'].createElement('img', { src: item || 'data:image/png;base64,null' });else return _react2['default'].createElement(
+          'a',
+          { href: item },
+          'Download'
+        );
+      } else if (this.props.type === 'boolean') {
+        return _react2['default'].createElement(
+          'span',
+          null,
+          item ? 'true' : 'false'
+        );
+      } else {
+        return _react2['default'].createElement(
+          'span',
+          null,
+          item || '-'
+        );
+      }
+    }
+  }]);
+
+  return Content;
+})(_react2['default'].Component);
+
 module.exports = exports['default'];
 
 },{"react":"react","react-router":"react-router"}],8:[function(require,module,exports){

@@ -20,9 +20,7 @@ export default class extends React.Component {
         <table className="table">
           <thead>
             <tr>
-            {fItem.map( fItem => {
-              return <th key={fItem.label} onClick={this.sortBy.bind(this, fItem.label)}>{fItem.label}</th>
-            })}
+              {fItem.map( fItem => <th key={fItem.label} onClick={this.sortBy.bind(this, fItem.label)}>{fItem.label}</th> )}
               <th />
             </tr>
             <tr>
@@ -41,19 +39,7 @@ export default class extends React.Component {
             let URLparams = {identity:this.props.identity, id: item.id};
             return (
               <tr key={item.id}>
-                {fItem.map( it => {
-                  if (it.type === 'binary' ) {
-                    if (!item[it.label])
-                      return <td key={it.label} />
-                    else if (item[it.label].split("/")[0] === 'data:image')
-                      return <td key={it.label}><img src={item[it.label]||'data:image/png;base64,null'} /></td>
-                    else
-                      return <td key={it.label}>A link</td>
-                  } else if (it.type === 'boolean' )
-                    return <td key={it.label}>{item[it.label]?'true':'false'}</td>
-                  else
-                    return <td key={it.label}>{item[it.label]||'-'}</td>
-                })}
+                {fItem.map( it => <td key={it.label}><Content item={item[it.label]} type={it.type} /></td> )}
                 <td><Link to="update" params={URLparams}>Edit</Link></td>
               </tr>
             );
@@ -63,5 +49,23 @@ export default class extends React.Component {
       </div>
 
     );
+  }
+}
+
+class Content extends React.Component {
+  render() {
+    let item = this.props.item;
+    if (this.props.type === 'binary' ) {
+      if (!item)
+        return <span />;
+      else if (item.split("/")[0] === 'data:image')
+        return <img src={item||'data:image/png;base64,null'} />;
+      else
+        return <a href={item}>Download</a>;
+    } else if (this.props.type === 'boolean' ) {
+      return <span>{item?'true':'false'}</span>;
+    } else {
+      return <span>{item||'-'}</span>;
+    }
   }
 }
