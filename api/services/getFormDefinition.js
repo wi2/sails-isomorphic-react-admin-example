@@ -52,6 +52,10 @@ function prepare(def, data, attr) {
       res.input = 'ipv6';
     else if (validator.image)
       res.input = 'image';
+    else if (validator.regex) {
+       res.input = 'regex';
+       res.pattern = res.regex.toString();
+    }
 
     if (validator.min)
       res.minValue = validator.min;

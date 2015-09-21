@@ -28,7 +28,7 @@ _reactRouter2['default'].run(require('./routes'), _reactRouter.HistoryLocation, 
   delete window.__ReactInitState__;
 });
 
-},{"./forms":2,"./layout":3,"./routes":10,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./forms":2,"./layout":3,"./routes":11,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -568,7 +568,7 @@ var List = (function (_React$Component3) {
 
 exports.List = List;
 
-},{"../partials/admin-form":6,"../partials/admin-list":7,"../partials/layout":8,"react":"react"}],6:[function(require,module,exports){
+},{"../partials/admin-form":6,"../partials/admin-list":7,"../partials/layout":9,"react":"react"}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -654,6 +654,8 @@ var _default = (function (_React$Component) {
                 params.widget = _newforms.Textarea;
               case 'string':
                 mobj[item.label] = (0, _newforms.CharField)(params);break;
+              case 'regex':
+                mobj[item.label] = (0, _newforms.RegexField)(eval(item.pattern), params);break;
               case 'slug':
                 mobj[item.label] = (0, _newforms.SlugField)(params);break;
               case 'integer':
@@ -673,7 +675,6 @@ var _default = (function (_React$Component) {
           }
         }
       }
-      console.log(mobj);
       this.mForm = _newforms.Form.extend(mobj);
     }
   }, {
@@ -917,6 +918,113 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _newformsBootstrap = require('newforms-bootstrap');
+
+var comment = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'Commentaire'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'name', md: '8' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'post' })
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'message' })
+  )
+);
+
+exports.comment = comment;
+var post = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'Article'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'content' })
+  )
+);
+
+exports.post = post;
+var image = _react2['default'].createElement(
+  _newformsBootstrap.Container,
+  { autoColumns: 'md' },
+  _react2['default'].createElement(
+    'h1',
+    null,
+    'Image'
+  ),
+  _react2['default'].createElement('hr', null),
+  _react2['default'].createElement(
+    'p',
+    { className: 'text-right' },
+    _react2['default'].createElement(
+      'button',
+      { className: 'btn btn-default' },
+      'Save'
+    )
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'title' })
+  ),
+  _react2['default'].createElement(
+    _newformsBootstrap.Row,
+    null,
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'small', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'medium', md: '4' }),
+    _react2['default'].createElement(_newformsBootstrap.Field, { name: 'big' })
+  )
+);
+exports.image = image;
+
+},{"newforms-bootstrap":"newforms-bootstrap","react":"react"}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -954,7 +1062,7 @@ var _default = (function () {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"./nav":9,"react":"react"}],9:[function(require,module,exports){
+},{"./nav":10,"react":"react"}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -1057,7 +1165,7 @@ var _default = (function () {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],11:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -1079,4 +1187,4 @@ module.exports = _react2['default'].createElement(
   _react2['default'].createElement(_reactRouter.Route, { name: 'update', path: '/admin/:identity/:id', handler: _pagesAdmin.Update })
 );
 
-},{"./pages/admin":5,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9,10]);
+},{"./pages/admin":5,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9,10,11]);

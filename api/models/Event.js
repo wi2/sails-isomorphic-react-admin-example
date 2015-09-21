@@ -8,7 +8,10 @@
 module.exports = {
 
   attributes: {
-    title: 'string',
+    title: {
+      type: 'string',
+      regex: /^test-[a-z]+$/
+    },
     content: 'text',
     link: {
       type: 'string',

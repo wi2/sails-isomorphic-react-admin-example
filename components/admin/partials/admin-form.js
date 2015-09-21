@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react'
-import {Form, Textarea, RenderForm, CharField, SlugField, EmailField, URLField, FilePathField, GenericIPAddressField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField, FileField, MultipleFileField, ImageField} from 'newforms'
+import {Form, Textarea, RenderForm, CharField, RegexField, SlugField, EmailField, URLField, FilePathField, GenericIPAddressField, ChoiceField, DateField, DateTimeField, BooleanField, IntegerField, FloatField, FileField, MultipleFileField, ImageField} from 'newforms'
 import BootstrapForm, {Container, Row} from 'newforms-bootstrap'
 
 export default class extends React.Component {
@@ -45,6 +45,7 @@ export default class extends React.Component {
             case 'ipv6':    mobj[item.label] = GenericIPAddressField(params, 'ipv6'); break;
             case 'text':    params.widget = Textarea;
             case 'string':  mobj[item.label] = CharField(params); break;
+            case 'regex':   mobj[item.label] = RegexField(eval(item.pattern), params); break;
             case 'slug':    mobj[item.label] = SlugField(params); break;
             case 'integer': mobj[item.label] = IntegerField(params); break;
             case 'float':   mobj[item.label] = FloatField(params); break;
@@ -57,7 +58,6 @@ export default class extends React.Component {
         }
       }
     }
-    console.log(mobj);
     this.mForm = Form.extend(mobj);
   }
   getFile(name, url) {
