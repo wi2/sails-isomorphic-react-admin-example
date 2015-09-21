@@ -67,4 +67,5 @@ sails lift
 and go to http://localhost:1337/admin to see auto generate admin
 
 ## customize form with [newforms-bootstrap](https://github.com/insin/newforms-bootstrap)
-see components/admin/partials/admin-models.js and update this.
+see components/admin/forms.js and update this.
+
