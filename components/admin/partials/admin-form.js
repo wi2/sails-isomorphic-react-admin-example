@@ -94,8 +94,8 @@ export default class extends React.Component {
         <p className="text-right">
           <button className="btn btn-default">Save</button>
         </p>
-        <RenderForm form={this.mForm}  ref="mForm">
-          <BootstrapForm />
+        <RenderForm form={this.mForm} ref="mForm">
+          <BootstrapForm form={this.mForm}  />
         </RenderForm>
       </form>
     );
