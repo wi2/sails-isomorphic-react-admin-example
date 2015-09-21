@@ -50,6 +50,8 @@ function prepare(def, data, attr) {
       res.input = 'ipv4';
     else if (validator.ipv6)
       res.input = 'ipv6';
+    else if (validator.image)
+      res.input = 'image';
 
     if (validator.min)
       res.minValue = validator.min;
@@ -58,8 +60,6 @@ function prepare(def, data, attr) {
   }
 
   res.required = validator && validator.required ? validator.required : false;
-
-  // console.log("res", res);
 
   //Promise
   return new Promise( (resolve, reject) => {

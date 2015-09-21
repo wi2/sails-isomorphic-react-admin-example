@@ -28,7 +28,7 @@ _reactRouter2['default'].run(require('./routes'), _reactRouter.HistoryLocation, 
   delete window.__ReactInitState__;
 });
 
-},{"./forms":2,"./layout":3,"./routes":11,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./forms":2,"./layout":3,"./routes":10,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -568,7 +568,7 @@ var List = (function (_React$Component3) {
 
 exports.List = List;
 
-},{"../partials/admin-form":6,"../partials/admin-list":7,"../partials/layout":9,"react":"react"}],6:[function(require,module,exports){
+},{"../partials/admin-form":6,"../partials/admin-list":7,"../partials/layout":8,"react":"react"}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -636,6 +636,8 @@ var _default = (function (_React$Component) {
             switch (item.input) {
               case 'binary':
                 mobj[item.label] = (0, _newforms.FileField)(params);break;
+              case 'image':
+                mobj[item.label] = (0, _newforms.ImageField)(params);break;
               case 'email':
                 mobj[item.label] = (0, _newforms.EmailField)(params);break;
               case 'url':
@@ -669,8 +671,6 @@ var _default = (function (_React$Component) {
           }
         }
       }
-      // console.log(mobj);
-      // mobj['image'] = ImageField();
       this.mForm = _newforms.Form.extend(mobj);
     }
   }, {
@@ -873,36 +873,6 @@ module.exports = exports['default'];
 },{"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
-// "use strict";
-
-// import React from 'react'
-// import {Field} from 'newforms-bootstrap'
-
-// var MultiEmailField = Field.extend({
-//   /**
-//    * Normalise data to a list of strings.
-//    */
-//   toJavaScript: function(value) {
-//     // Return an empty list if no input was given
-//     if (this.isEmptyValue(value)) {
-//       return []
-//     }
-//     return value.split(/, ?/g)
-//   },
-
-//   /**
-//    * Check if value consists only of valid emails.
-//    */
-//   validate: function(value) {
-//     // Use the parent's handling of required fields, etc.
-//     MultiEmailField.__super__.validate.call(this, value)
-//     value.map(forms.validators.validateEmail)
-//   }
-// });
-
-},{}],9:[function(require,module,exports){
-"use strict";
-
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -944,7 +914,7 @@ var _default = (function () {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"./nav":10,"react":"react"}],10:[function(require,module,exports){
+},{"./nav":9,"react":"react"}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -1047,7 +1017,7 @@ var _default = (function () {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"react":"react","react-router":"react-router"}],11:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -1069,4 +1039,4 @@ module.exports = _react2['default'].createElement(
   _react2['default'].createElement(_reactRouter.Route, { name: 'update', path: '/admin/:identity/:id', handler: _pagesAdmin.Update })
 );
 
-},{"./pages/admin":5,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9,10,11]);
+},{"./pages/admin":5,"react":"react","react-router":"react-router"}]},{},[1,2,3,4,5,6,7,8,9,10]);

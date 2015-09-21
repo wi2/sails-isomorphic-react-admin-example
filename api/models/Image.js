@@ -14,14 +14,17 @@ module.exports = {
     },
     small: {
       type: 'binary',
-      required: true
+      required: true,
+      image: true
     },
     medium: {
       type: 'binary',
-      required: true
+      required: true,
+      image: true
     },
     big: {
-      type: 'binary'
+      type: 'binary',
+      image: true
     },
 
   }

@@ -33,6 +33,7 @@ export default class extends React.Component {
 
           switch(item.input) {
             case 'binary':  mobj[item.label] = FileField(params); break;
+            case 'image':   mobj[item.label] = ImageField(params); break;
             case 'email':   mobj[item.label] = EmailField(params); break;
             case 'url':     mobj[item.label] = URLField(params); break;
             case 'urlish':  mobj[item.label] = FilePathField(params); break;
@@ -52,8 +53,6 @@ export default class extends React.Component {
         }
       }
     }
-    // console.log(mobj);
-    // mobj['image'] = ImageField();
     this.mForm = Form.extend(mobj);
   }
   _onSubmit(e) {
