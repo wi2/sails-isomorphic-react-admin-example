@@ -32,8 +32,12 @@ export default class extends React.Component {
           delete params.defaultsTo;
 
           switch(item.input) {
-            case 'binary':  mobj[item.label] = FileField(params); break;
-            case 'image':   mobj[item.label] = ImageField(params); break;
+            case 'binary':  if (data && data[item.label])
+                              params.initial = this.getFile(item.label, data[item.label])
+                            mobj[item.label] = FileField(params); break;
+            case 'image':   if (data && data[item.label])
+                              params.initial = this.getFile(item.label, data[item.label])
+                            mobj[item.label] = ImageField(params); break;
             case 'email':   mobj[item.label] = EmailField(params); break;
             case 'url':     mobj[item.label] = URLField(params); break;
             case 'urlish':  mobj[item.label] = FilePathField(params); break;
@@ -53,7 +57,16 @@ export default class extends React.Component {
         }
       }
     }
+    console.log(mobj);
     this.mForm = Form.extend(mobj);
+  }
+  getFile(name, url) {
+    function CurrentFile(){
+      this.name = name;
+      this.url = url;
+    }
+    CurrentFile.prototype.toString = function() { return this.name }
+    return new CurrentFile(name, url);
   }
   _onSubmit(e) {
     e.preventDefault();

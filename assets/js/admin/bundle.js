@@ -635,8 +635,10 @@ var _default = (function (_React$Component) {
 
             switch (item.input) {
               case 'binary':
+                if (data && data[item.label]) params.initial = this.getFile(item.label, data[item.label]);
                 mobj[item.label] = (0, _newforms.FileField)(params);break;
               case 'image':
+                if (data && data[item.label]) params.initial = this.getFile(item.label, data[item.label]);
                 mobj[item.label] = (0, _newforms.ImageField)(params);break;
               case 'email':
                 mobj[item.label] = (0, _newforms.EmailField)(params);break;
@@ -671,7 +673,20 @@ var _default = (function (_React$Component) {
           }
         }
       }
+      console.log(mobj);
       this.mForm = _newforms.Form.extend(mobj);
+    }
+  }, {
+    key: 'getFile',
+    value: function getFile(name, url) {
+      function CurrentFile() {
+        this.name = name;
+        this.url = url;
+      }
+      CurrentFile.prototype.toString = function () {
+        return this.name;
+      };
+      return new CurrentFile(name, url);
     }
   }, {
     key: '_onSubmit',
