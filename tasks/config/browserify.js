@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 
   grunt.config.set('browserify', {
     options: {
-      external: ['react', 'react-router', 'newforms', 'newforms-bootstrap'],
+      external: ['react', 'react-router', 'newforms', 'newforms-bootstrap', 'auto-admin'],
       transform: [
         [require("babelify"), require('grunt-react').browserify]
       ],

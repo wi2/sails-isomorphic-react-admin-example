@@ -23,7 +23,7 @@ npm install
 
 npm install -g browserify
 
-browserify -r react -r react-router -r newforms -r newforms-bootstrap > assets/js/admin/dependencies/build.js
+browserify -r react -r react-router -r newforms -r newforms-bootstrap -r auto-admin > assets/js/admin/dependencies/build.js
 
 browserify -r react -r react-router > assets/js/front/dependencies/build.js
 

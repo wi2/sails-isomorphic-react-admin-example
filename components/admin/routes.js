@@ -2,7 +2,8 @@
 
 import React from 'react'
 import {RouteHandler, Route} from 'react-router'
-import {Home, List, Create, Update} from './pages/admin'
+import {Home, List, Create, Update} from 'auto-admin'
+// import {Home, List, Create, Update} from './pages/admin'
 
 module.exports = (
   <Route handler={RouteHandler}>
