@@ -10,6 +10,7 @@ with
 - [sails](http://sailsjs.org)
 - [react](https://github.com/facebook/react)
 - [react-router](https://github.com/rackt/react-router)
+- [auto-admin](https://github.com/wi2/auto-admin)
 - [newforms](https://github.com/insin/newforms)
 - [newforms-bootstrap](https://github.com/insin/newforms-bootstrap)
 - [browserify](https://github.com/substack/node-browserify)
