@@ -208,6 +208,8 @@ var _list = require('./list');
 
 var _list2 = _interopRequireDefault(_list);
 
+var _reactRouter = require('react-router');
+
 var Home = (function (_React$Component) {
   function Home() {
     _classCallCheck(this, Home);
@@ -458,7 +460,16 @@ var List = (function (_React$Component3) {
 })(_react2['default'].Component);
 
 exports.List = List;
-},{"./form":1,"./layout":3,"./list":4,"react":"react"}],3:[function(require,module,exports){
+var Routes = _react2['default'].createElement(
+  _reactRouter.Route,
+  { handler: _reactRouter.RouteHandler },
+  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/admin', handler: Home }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: '/admin/:identity', handler: List }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'create', path: '/admin/:identity/new', handler: Create }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'update', path: '/admin/:identity/:id', handler: Update })
+);
+exports.Routes = Routes;
+},{"./form":1,"./layout":3,"./list":4,"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

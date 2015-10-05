@@ -15,6 +15,8 @@ var _reactRouter = require('react-router');
 
 var _reactRouter2 = _interopRequireDefault(_reactRouter);
 
+var _autoAdmin = require('auto-admin');
+
 var _layout = require('./layout');
 
 var _layout2 = _interopRequireDefault(_layout);
@@ -23,12 +25,12 @@ var _forms = require('./forms');
 
 var modelsForm = _interopRequireWildcard(_forms);
 
-_reactRouter2['default'].run(require('./routes'), _reactRouter.HistoryLocation, function (Root) {
+_reactRouter2['default'].run(_autoAdmin.Routes, _reactRouter.HistoryLocation, function (Root) {
   _react2['default'].render(_react2['default'].createElement(Root, _extends({}, window.__ReactInitState__, { layout: _layout2['default'], models: modelsForm })), document.body);
   delete window.__ReactInitState__;
 });
 
-},{"./forms":2,"./layout":3,"./routes":5,"react":"react","react-router":"react-router"}],2:[function(require,module,exports){
+},{"./forms":2,"./layout":3,"auto-admin":"auto-admin","react":"react","react-router":"react-router"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, '__esModule', {
@@ -282,28 +284,4 @@ var _default = (function () {
 exports['default'] = _default;
 module.exports = exports['default'];
 
-},{"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
-"use strict";
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = require('react-router');
-
-var _autoAdmin = require('auto-admin');
-
-// import {Home, List, Create, Update} from './pages/admin'
-
-module.exports = _react2['default'].createElement(
-  _reactRouter.Route,
-  { handler: _reactRouter.RouteHandler },
-  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/admin', handler: _autoAdmin.Home }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: '/admin/:identity', handler: _autoAdmin.List }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'create', path: '/admin/:identity/new', handler: _autoAdmin.Create }),
-  _react2['default'].createElement(_reactRouter.Route, { name: 'update', path: '/admin/:identity/:id', handler: _autoAdmin.Update })
-);
-
-},{"auto-admin":"auto-admin","react":"react","react-router":"react-router"}]},{},[1,2,3,4,5]);
+},{"react":"react","react-router":"react-router"}]},{},[1,2,3,4]);
