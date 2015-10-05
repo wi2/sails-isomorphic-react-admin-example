@@ -1,6 +1,8 @@
 # Sails Isomorphic React with Admin Example
 
 a [Sails](http://sailsjs.org) application with
+- All the interface are automatically created
+- The forms are automatically generated depending on model's attributes
 - separate compiling assets for backoffice and frontoffice
 - react isomorphic render
 - simple administration automatic(model) and extendable
