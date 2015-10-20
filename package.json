@@ -12,7 +12,7 @@
     "admin"
   ],
   "dependencies": {
-    "auto-admin": "0.0.5",
+    "auto-admin": "^0.2.1",
     "babelify": "^6.3.0",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",

@@ -25,7 +25,7 @@ var _forms = require('./forms');
 
 var modelsForm = _interopRequireWildcard(_forms);
 
-_reactRouter2['default'].run(_autoAdmin.Routes, _reactRouter.HistoryLocation, function (Root) {
+_reactRouter2['default'].run((0, _autoAdmin.Routes)(), _reactRouter.HistoryLocation, function (Root) {
   _react2['default'].render(_react2['default'].createElement(Root, _extends({}, window.__ReactInitState__, { layout: _layout2['default'], models: modelsForm })), document.body);
   delete window.__ReactInitState__;
 });
