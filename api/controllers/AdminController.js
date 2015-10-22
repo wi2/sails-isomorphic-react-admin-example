@@ -39,21 +39,38 @@ module.exports = {
     });
   },
   list: function(req, res) {
-    var query = sails.models[req.param('identity')].find(req.param('contain')||{})
-    if (req.param('sort'))
-      query = query.sort(req.param('sort'))
-    query.then( items => {
-      getFormDefinition( req.param('identity') )
+    var items, current, total, limit;
+    var query = sails.models[req.param('identity')]
+
+    query
+      .count(req.param('contain')||{})
+      .then( count => {
+        limit = req.param('limit')||3;
+        let skip = req.param('skip')||0;
+        total = count;
+        current = skip ? Math.ceil(total/skip) : 1;
+        return query
+          .find(req.param('contain')||{})
+          .limit(limit)
+          .skip(skip)
+          .sort(req.param('sort')||"id ASC");
+      })
+      .then( result => {
+        items = result;
+        return getFormDefinition( req.param('identity') )
+      })
       .then( result => {
         var state = {
           identity: req.param('identity'),
           identities: Object.keys(sails.models),
           formItem: result,
-          items: items
+          items: items,
+          current: current,
+          total: total,
+          limit: limit
         };
         renderTo(Routes(), req.wantsJSON, res, '/admin/'+req.param('identity'), {title:'Administration - List'}, state);
       });
-    });
   }
 };
 
