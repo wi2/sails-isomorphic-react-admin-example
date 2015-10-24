@@ -24,18 +24,20 @@ module.exports = {
     })
   },
   update: function(req, res) {
+    var item;
     sails.models[req.param('identity')].findOne(req.param('id'))
-    .then( item => {
-      getFormDefinition( req.param('identity') )
-      .then( result => {
-        var state = {
-          identity: req.param('identity'),
-          identities: Object.keys(sails.models),
-          formItem: result,
-          item: item
-        };
-        renderTo(Routes(), req.wantsJSON, res, '/admin/'+req.param('identity')+'/'+req.param('id'), {title:'Administration - update record'}, state);
-      });
+    .then( itm => {
+      item = itm;
+      return getFormDefinition( req.param('identity') )
+    })
+    .then( result => {
+      var state = {
+        identity: req.param('identity'),
+        identities: Object.keys(sails.models),
+        formItem: result,
+        item: item
+      };
+      renderTo(Routes(), req.wantsJSON, res, '/admin/'+req.param('identity')+'/'+req.param('id'), {title:'Administration - update record'}, state);
     });
   },
   list: function(req, res) {
