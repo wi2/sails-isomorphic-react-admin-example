@@ -39,16 +39,18 @@ module.exports = {
     });
   },
   list: function(req, res) {
-    var items, current, total, limit;
+    var items, current, total, limit, skip;
     var query = sails.models[req.param('identity')]
 
     query
       .count(req.param('contain')||{})
       .then( count => {
-        limit = req.param('limit')||3;
-        let skip = req.param('skip')||0;
+        limit = req.param('limit')||2;
+        skip = req.param('skip')||0;
+        if(skip == null) skip = 0;
         total = count;
-        current = skip ? Math.ceil(total/skip) : 1;
+        current = skip ? Math.ceil(skip/limit)+1 : 1;
+
         return query
           .find(req.param('contain')||{})
           .limit(limit)

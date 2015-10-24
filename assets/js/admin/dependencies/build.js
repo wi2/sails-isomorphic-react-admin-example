@@ -184,7 +184,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 exports.Routes = Routes;
 
@@ -439,7 +439,8 @@ var List = (function (_AdminComponent3) {
     this.state = {
       contain: {},
       sort: this.props.sort || ['id', 'ASC'],
-      skip: this.props.skip || 0
+      skip: this.props.skip || 0,
+      limit: this.props.limit || 30
     };
   }
 
@@ -455,24 +456,29 @@ var List = (function (_AdminComponent3) {
     value: function componentWillUpdate(props, state) {
       if (this.props.params.identity !== props.params.identity) {
         this.getItems(props.params.identity);
-      } else if (state.doChange || this.state.doChange) {
+      } else if (state.doChange && state.doChange !== this.state.doChange) {
+        console.log(state)
+        this.getItems(props.params.identity, {
+          contain: state.contain,
+          sort: state.sort.join(" "),
+          limit: props.limit,
+          skip: state.skip
+        });
         this.setState({ doChange: false });
-        this.getItems();
       }
     }
   }, {
     key: 'getItems',
-    value: function getItems() {
+    value: function getItems(identity, params) {
       var _this6 = this;
 
-      var identity = arguments.length <= 0 || arguments[0] === undefined ? this.props.identity || this.props.params.identity : arguments[0];
+      if (identity === undefined) identity = this.props.identity || this.props.params.identity;
 
       if (typeof io !== "undefined") {
-        // let identity = this.props.identity||this.props.params.identity;
-        var params = {
+        params = params || {
           contain: this.state.contain,
           sort: this.state.sort.join(" "),
-          limit: this.props.limit,
+          limit: this.state.limit,
           skip: this.state.skip
         };
         io.socket.get(this.props.root + "/" + identity, params, function (res) {
@@ -485,9 +491,7 @@ var List = (function (_AdminComponent3) {
     value: function filterBy(lbl, val) {
       var contain = this.state.contain;
       contain[lbl] = { 'contains': val };
-      if (val.length) this.setState(contain);else if (this.state.contain[lbl]) delete this.state.contain[lbl];
-      this.setState({ doChange: true });
-      // this.getItems();
+      this.setState({ contain: contain, doChange: true });
     }
   }, {
     key: 'sortBy',
@@ -496,20 +500,19 @@ var List = (function (_AdminComponent3) {
       var direction = 'ASC';
       if (sort[0] === lbl) direction = sort[1] === 'ASC' ? 'DESC' : 'ASC';
       this.setState({
-        sort: [lbl, direction],
-        doChange: true
+        doChange: true,
+        sort: [lbl, direction]
       });
-      // this.getItems();
     }
   }, {
     key: 'changePage',
     value: function changePage(num) {
-      var skip = (num - 1) * this.props.limit;
+      var skip = (num - 1) * (this.props.limit || this.state.limit);
+      console.log("skip", skip);
       this.setState({
-        skip: skip,
-        doChange: true
+        doChange: true,
+        skip: skip
       });
-      // this.getItems();
     }
   }, {
     key: 'render',
@@ -928,10 +931,15 @@ var _default = (function (_React$Component) {
             })
           )
         ),
-        _react2['default'].createElement(_rcPagination2['default'], { onChange: this.changePage.bind(this),
-          pageSize: this.props.limit,
-          current: this.props.current,
-          total: this.props.total })
+        _react2['default'].createElement(
+          'div',
+          { className: 'wrap-pagination' },
+          _react2['default'].createElement(_rcPagination2['default'], { className: 'pagination',
+            onChange: this.changePage.bind(this),
+            pageSize: this.props.limit,
+            current: this.props.current,
+            total: this.props.total })
+        )
       );
     }
   }]);
@@ -4723,12 +4731,12 @@ var FormRow = React.createClass({displayName: "FormRow",
     // Otherwise render a BoundField
     var bf = this.props.bf
     var isPending = bf.isPending()
-    return React.createElement(this.props.component, React.__spread({},  attrs), 
-      bf.label && bf.labelTag(), " ", bf.render(), 
-      isPending && ' ', 
-      isPending && this.renderProgress(), 
-      bf.errors().render(), 
-      bf.helpText && ' ', 
+    return React.createElement(this.props.component, React.__spread({},  attrs),
+      bf.label && bf.labelTag(), " ", bf.render(),
+      isPending && ' ',
+      isPending && this.renderProgress(),
+      bf.errors().render(),
+      bf.helpText && ' ',
       bf.helpTextTag()
     )
   }
@@ -6782,31 +6790,31 @@ var RenderForm = React.createClass({displayName: "RenderForm",
       return bf.render()
     })
 
-    return React.createElement(props.component, React.__spread({},  attrs), 
+    return React.createElement(props.component, React.__spread({},  attrs),
       topErrors.isPopulated() && React.createElement(props.row, {
-        className: form.errorCssClass, 
-        component: props.rowComponent, 
-        content: topErrors.render(), 
+        className: form.errorCssClass,
+        component: props.rowComponent,
+        content: topErrors.render(),
         key: form.addPrefix(NON_FIELD_ERRORS)}
-      ), 
+      ),
       form.visibleFields().map(function(bf)  {return React.createElement(props.row, {
-        bf: bf, 
-        className: bf.cssClasses(), 
-        component: props.rowComponent, 
-        key: bf.htmlName, 
+        bf: bf,
+        className: bf.cssClasses(),
+        component: props.rowComponent,
+        key: bf.htmlName,
         progress: props.progress}
-      );}), 
+      );}),
       form.nonFieldPending() && React.createElement(props.row, {
-        className: form.pendingRowCssClass, 
-        component: props.rowComponent, 
-        content: this.renderProgress(), 
+        className: form.pendingRowCssClass,
+        component: props.rowComponent,
+        content: this.renderProgress(),
         key: form.addPrefix('__pending__')}
-      ), 
+      ),
       hiddenFields.length > 0 && React.createElement(props.row, {
-        className: form.hiddenFieldRowCssClass, 
-        component: props.rowComponent, 
-        content: hiddenFields, 
-        hidden: true, 
+        className: form.hiddenFieldRowCssClass,
+        component: props.rowComponent,
+        content: hiddenFields,
+        hidden: true,
         key: form.addPrefix('__hidden__')}
       )
     )
@@ -6915,30 +6923,30 @@ var RenderFormSet = React.createClass({displayName: "RenderFormSet",
     }
     var topErrors = formset.nonFormErrors()
 
-    return React.createElement(props.component, React.__spread({},  attrs), 
+    return React.createElement(props.component, React.__spread({},  attrs),
       topErrors.isPopulated() && React.createElement(props.row, {
-        className: formset.errorCssClass, 
-        content: topErrors.render(), 
-        key: formset.addPrefix(NON_FIELD_ERRORS), 
+        className: formset.errorCssClass,
+        content: topErrors.render(),
+        key: formset.addPrefix(NON_FIELD_ERRORS),
         rowComponent: props.rowComponent}
-      ), 
+      ),
       formset.forms().map(function(form)  {return React.createElement(RenderForm, {
-        form: form, 
-        formComponent: props.formComponent, 
-        progress: props.progress, 
-        row: props.row, 
+        form: form,
+        formComponent: props.formComponent,
+        progress: props.progress,
+        row: props.row,
         rowComponent: props.rowComponent}
-      );}), 
+      );}),
       formset.nonFormPending() && React.createElement(props.row, {
-        className: formset.pendingRowCssClass, 
-        content: this.renderProgress(), 
-        key: formset.addPrefix('__pending__'), 
+        className: formset.pendingRowCssClass,
+        content: this.renderProgress(),
+        key: formset.addPrefix('__pending__'),
         rowComponent: props.rowComponent}
-      ), 
+      ),
       props.useManagementForm && React.createElement(RenderForm, {
-        form: formset.managementForm(), 
-        formComponent: props.formComponent, 
-        row: props.row, 
+        form: formset.managementForm(),
+        formComponent: props.formComponent,
+        row: props.row,
         rowComponent: props.rowComponent}
       )
     )
@@ -12365,7 +12373,7 @@ var RouteHandler = require('./RouteHandler');
  *       <Route name="about" handler={About}/>
  *     </Route>
  *   ];
- *   
+ *
  *   Router.run(routes, function (Handler) {
  *     React.render(<Handler/>, document.body);
  *   });
@@ -13546,9 +13554,9 @@ var createRouter = require('./createRouter');
  *   Router.run(routes, function (Handler) {
  *     React.render(<Handler/>, document.body);
  *   });
- * 
+ *
  * Using HTML5 history and a custom "cursor" prop:
- * 
+ *
  *   Router.run(routes, Router.HistoryLocation, function (Handler) {
  *     React.render(<Handler cursor={cursor}/>, document.body);
  *   });
@@ -34393,9 +34401,9 @@ module.exports = require('./dist/index.js');
 var React = require('react')
 
 var $__0=
-     
-     
-      
+
+
+
   require('newforms'),BooleanField=$__0.BooleanField,BoundField=$__0.BoundField,CheckboxChoiceInput=$__0.CheckboxChoiceInput,CheckboxFieldRenderer=$__0.CheckboxFieldRenderer,CheckboxSelectMultiple=$__0.CheckboxSelectMultiple,ChoiceFieldRenderer=$__0.ChoiceFieldRenderer,FileField=$__0.FileField,Form=$__0.Form,MultiValueField=$__0.MultiValueField,MultiWidget=$__0.MultiWidget,RadioChoiceInput=$__0.RadioChoiceInput,RadioFieldRenderer=$__0.RadioFieldRenderer,RadioSelect=$__0.RadioSelect
 
 var SPINNER = 'data:image/gif;base64,R0lGODlhDgAOANU%2FAJ2rtf39%2FfL09a65wvX2993i5qq2v9Ta35CgrLjCyuTo6%2Bfq7aGvub3Hzs7V2vX3%2BI6eq9rf47rEzOvu8NLZ3ens7u7w8sDJ0ODl6MfP1aazvYqbqNDX3Pr7%2FLW%2Fx4iZpomap%2BPn6vHz9Y2dqqSxu%2FT19%2Bjr7tfd4dvg5KOwuvj5%2BeLm6ae0vd%2Fk5%2Fj5%2BvHz9Nbc4Nbc4Y2dqff4%2Bebp7NXb3%2FDy9Iqbp%2BXp7Pv8%2FL%2FIz%2Fn6%2B7nDy%2FDy84%2Bfq%2F%2F%2F%2FyH%2FC05FVFNDQVBFMi4wAwEAAAAh%2FwtYTVAgRGF0YVhNUDw%2FeHBhY2tldCBiZWdpbj0i77u%2FIiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8%2BIDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyNzA4MjZFM0EyRUExMUUzQjE2OUQwNUQ1MzZBQ0M2NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyNzA4MjZFNEEyRUExMUUzQjE2OUQwNUQ1MzZBQ0M2NyI%2BIDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjk2NDkzOTlDQTJBOTExRTNCMTY5RDA1RDUzNkFDQzY3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjI3MDgyNkUyQTJFQTExRTNCMTY5RDA1RDUzNkFDQzY3Ii8%2BIDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY%2BIDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8%2BAf%2F%2B%2Ffz7%2Bvn49%2Fb19PPy8fDv7u3s6%2Brp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M%2FOzczLysnIx8bFxMPCwcC%2Fvr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ%2BenZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8%2BPTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEBQMAPwAsAAAAAA4ADgAABhTAn3BILBqPyKRyyWw6n9CodGoMAgAh%2BQQFAwA%2FACwHAAAAAQADAAAGBcCOrRMEACH5BAUDAD8ALAcAAAABAAMAAAYFwNKhFAQAIfkEBQMAPwAsBwAAAAEAAwAABgXABQkXBAAh%2BQQFAwA%2FACwHAAAAAgADAAAGB8DQ7FOLPYIAIfkEBQMAPwAsBwAAAAMAAwAABgrAX%2Bn3%2B0xOmV8QACH5BAUDAD8ALAcAAAAEAAMAAAYLQMxvOCSJfjpNIAgAIfkEBQMAPwAsBwAAAAUABAAABg%2FA0G9I%2FCmGDR%2BoMiRQfkEAIfkEBQMAPwAsBwAAAAYABQAABhNAzG9IHIaGNcnQQXwwPotm7RcEACH5BAUDAD8ALAcAAAAHAAYAAAYVwNVvSCwSTw3ExzgECYkEBMOYMXSCACH5BAUDAD8ALAcAAAAHAAgAAAYcwNBvSCQqij8fiFMkDIXIFPLyERRRn1axl1gEAQAh%2BQQFAwA%2FACwLAAcAAwADAAAGCsDIB3P5CFCeXxAAIfkEBQMAPwAsCgAHAAQABQAABhHAn7Al%2FIkeiNTP8An9MA5hEAAh%2BQQFAwA%2FACwIAAMABgAKAAAGHMCf8LcaGo9II%2BpXOL6MDCGBASrWEKBhjRQaBgEAIfkEBQMAPwAsBgAAAAgADgAABirA3%2BRHLP4YxJCxYGw6i4%2BndEpsPQVGwi%2F1VE5ODd%2BPQxx8Pj9FsRIqNYMAIfkECQMAPwAsAwAAAAkADgAABiLAn%2FA3Gxp%2FjuNw8kMgldAhIUqtWq%2FKC692DLA%2BHyhhdQwCACH5BAkDAD8ALAAAAAAOAA4AAAZGwJ9wKOwQj0QGKYQ8XnwgR5NIYHymxAeCgR1efqLuDyUWkstfYgBJQBAdgPCwCiLWQBAJ7NSAco4VBh%2BDHyQKUw8KISVHQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGUcCfcEgsGn%2BBQehItCBADubwwQCtpMIHgoEVXj6vLupTEH9aP1OE%2BRX8DCORkYBICU0bgHtIqC6FNRsQEicnDT4gHEULGh%2BOHyQKTA8hISVFQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGVsCfcEgsGoe9Y1EBciiHDwYI8xSWEIyqUPexBVQBZeRTWHwoStSn5QIllJeP4GeQvYwEREpY2QBERARSIUMwGyMSMScNPiAcRSYsH5MfJApKDwohJUVBACH5BAkDAD8ALAAAAAAOAA4AAAZRwJ9wSCwaj8ghLTl0gFbMHwGR%2Bs0GCuTlI8B9DkjUp7X4UMJjFyih5f4MspdxWv1VNgARkcAAhYYwGyMSMScNPiAcRSYsH44fJFlHDwohJUVBACH5BAkDAD8ALAAAAAAOAA4AAAZVwJ9wSCwaj8gjIZBk%2FlgaZCb1m30kSN3HhvvUkJFPYfGhIFGflguUQF4%2Bgp9B9jISENRfZQMQEQkMICFDMBsjEjEnDT4gHEUmLB%2BSHyQKSA8KISVFQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGUcCfcEgsGo%2FCCZJo2nCWQsNIBHWBeEvLjvY5IAuf1uJDQaLC1gTy8hH8DLKXkYBICSsbAHVIYIBCQzAbIxIxJw0%2BIE9MLB%2BOHyQKSA8KISVFQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGU8CfcEgsCnNGYw3gSg5NG0DJKWSNetTf7JPI%2FhQfincRdgoUOReom7x8BD%2BD7GV8IBjCSlREJDA%2BIUMwGyMSMScNPiAORSYsH5AfKYFJDwohU0RBACH5BAkDAD8ALAAAAAAOAA4AAAZPwJ9wSCwKFyhjsXYDKIemDUDwFLJG1Orsw6sKcZ%2BD97f4UMYuUGL8M8hexkemI6xIRcQHA7QawjYjEjE1Ej4gDkUmLB%2BMHyQhTw8KGCVFQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGSsCfcEgsChcajJFY20BOS6FpAxBEhYaR6PqbfXjcH%2B5zCC8%2BlLALlAj%2FDLJXuELdDh%2BBImwzksRODQgNRiYsH4cfJCFRDworJUVBACH5BAkDAD8ALAAAAAAOAA4AAAZGwJ9Q2BkajQsN4nisbUaSAFNougEE06FhJMoKZyCeV0j7HMa%2FxYeCdoES6J9B9kJXNoDuGPaUxGA2WSYsH4UZYw8KGARHQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGPMCfUPhQDY%2FDBetzQB5rN4hk4hRWNgBBdWgYibZCFYgHFtKY5d%2B5WRaT091v%2BQqQg6HSV1n5MaV%2FDwFVQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGPMCfUPiwDI%2FDBetjQB5rG4ik5RSaNgBRdWgYabc%2FF4gHFtI%2Bh%2FIP96GoZ5%2BE%2Bsca9dQLrEBdA6HmRnNqQQAh%2BQQJAwA%2FACwAAAAADgAOAAAGN8CfUPgwDY9DE%2BvjQx5jm5Ek4hSaNgBRdWiQvbZCF4gHFtI%2Bh%2FIPh1bPPmS1YURQmxzqvH4%2FDAIAIfkECQMAPwAsAAAAAA4ADgAABjXAn1D4UASGSKGJ9fmokkPYZiSJHaGmDUAERRpkr%2B7QBeKJh4sP5SzEfWrs38yziNvv%2BLw%2BCAAh%2BQQJAwA%2FACwAAAAADgAOAAAGL8CfUPhQBIZIoYn1%2BaiSQ9hmJIkdoaYNQARFGmTcrlAF4omHFhLqzG673%2FC4%2FBwEACH5BAkDAD8ALAAAAAAOAA4AAAYqwJ9Q%2BAgFhkjhQvP5qJLD2gYiOR2hpg1AAEUaRqIu8rESm8%2FotHrNbrODACH5BAkDAD8ALAAAAAAOAA4AAAYowJ9QSFgFhkghTfP5qJLD2g3Cqx2hOQDABk3uSt2weEwum8%2FotBoZBAAh%2BQQJAwA%2FACwAAAAADgAOAAAGI8CfUEgIBYZI4ULz%2BaiSwx1iJDkdoUKTCMvter%2FgsHhMLpeDACH5BAkDAD8ALAAAAAAOAA4AAAYgwJ9QSFgFhkihSvP5qJLJAe9whFqv2Kx2y%2B16v%2BDwMAgAIfkECQMAPwAsAAAAAA4ADgAABh7An1BICAWGyKHl81Eln5nT8UmtWq%2FYrHbL7Xq%2FwyAAIfkECQMAPwAsAAAAAA4ADgAABh3An1D4WAWGSCTno0o6S7Wjc0qtWq%2FYrHbL7XqHQQAh%2BQQFAwA%2FACwAAAAADgAOAAAGGsCfcIgLDI9IgArJ%2FBWb0Kh0Sq1ar9isVhoEACH5BAUDAD8ALAYAAAABAAMAAAYFQAFHEAQAIfkECQMAPwAsBgAAAAEAAwAABgXAnK0TBAAh%2BQQJAwA%2FACwAAAAADgAOAAAGFMCfcEgsGo%2FIpHLJbDqf0Kh0agwCACH5BAUDAD8ALAAAAAAOAA4AAAYUwJ9wSCwaj8ikcslsOp%2FQqHRqDAIAIfkEBQMAPwAsAAAAAAEAAQAABgPAXxAAIfkEBQMAPwAsAAAAAAEAAQAABgPAXxAAIfkEBQMAPwAsAAAAAAEAAQAABgPAXxAAIfkEBQMAPwAsAAAAAAEAAQAABgPAXxAAOw%3D%3D'
@@ -34451,7 +34459,7 @@ function extend(dest, src) {
 }
 
 function errorMessage(message) {
-  return React.createElement("span", {className: "help-block"}, 
+  return React.createElement("span", {className: "help-block"},
     React.createElement("span", {className: "glyphicon glyphicon-exclamation-sign"}), " ", message
   )
 }
@@ -34521,8 +34529,8 @@ var BootstrapRadioRenderer = BootstrapChoiceFieldRenderer.extend({
 
 var BootstrapCheckboxInlineRenderer = CheckboxFieldRenderer.extend({
   render:function() {
-    return React.createElement("div", {className: "checkbox"}, 
-      this.choiceInputs().map(function(input)  {return React.createElement("label", {className: "checkbox-inline"}, 
+    return React.createElement("div", {className: "checkbox"},
+      this.choiceInputs().map(function(input)  {return React.createElement("label", {className: "checkbox-inline"},
         input.tag(), " ", input.choiceLabel
       );})
     )
@@ -34531,8 +34539,8 @@ var BootstrapCheckboxInlineRenderer = CheckboxFieldRenderer.extend({
 
 var BootstrapRadioInlineRenderer = RadioFieldRenderer.extend({
   render:function() {
-    return React.createElement("div", {className: "radio"}, 
-      this.choiceInputs().map(function(input)  {return React.createElement("label", {className: "radio-inline"}, 
+    return React.createElement("div", {className: "radio"},
+      this.choiceInputs().map(function(input)  {return React.createElement("label", {className: "radio-inline"},
         input.tag(), " ", input.choiceLabel
       );})
     )
@@ -34563,7 +34571,7 @@ var BootstrapForm = React.createClass({displayName: "BootstrapForm",
               field.widget.formatOutput === MultiWidget.prototype.formatOutput) {
             var colClass = 'col-sm-' + (12 / field.fields.length)
             field.widget.formatOutput = function(widgets) {
-              return React.createElement("div", {className: "row"}, 
+              return React.createElement("div", {className: "row"},
                 widgets.map(function(widget)  {return React.createElement("div", {className: colClass}, widget);})
               )
             }
@@ -34586,7 +34594,7 @@ var BootstrapForm = React.createClass({displayName: "BootstrapForm",
 
   render:function() {
     patchForm(this.props.form)
-    return React.createElement("div", null, 
+    return React.createElement("div", null,
       this.renderRows()
     )
   },
@@ -34596,21 +34604,21 @@ var BootstrapForm = React.createClass({displayName: "BootstrapForm",
     var form = this.props.form
     var formErrors = form.nonFieldErrors()
     if (formErrors.isPopulated()) {
-      rows.push(React.createElement("div", {key: form.addPrefix('__all__'), className: "alert alert-danger has-error"}, 
+      rows.push(React.createElement("div", {key: form.addPrefix('__all__'), className: "alert alert-danger has-error"},
         formErrors.messages().map(errorMessage)
       ))
     }
-    rows.push.apply(rows, form.visibleFields().map(function(field) 
+    rows.push.apply(rows, form.visibleFields().map(function(field)
       {return React.createElement(BootstrapField, {key: field.htmlName, field: field, spinner: this.props.spinner});}.bind(this)
     ))
     var hiddenFields = form.hiddenFields()
     if (hiddenFields.length > 0) {
-      rows.push(React.createElement("div", {key: form.addPrefix('__hiddenFields__'), style: {display: 'none'}}, 
+      rows.push(React.createElement("div", {key: form.addPrefix('__hiddenFields__'), style: {display: 'none'}},
         hiddenFields.map(function(field)  {return field.render();})
       ))
     }
     if (form.nonFieldPending()) {
-      rows.push(React.createElement("span", {key: form.addPrefix('__pending__'), className: "help-block"}, 
+      rows.push(React.createElement("span", {key: form.addPrefix('__pending__'), className: "help-block"},
         React.createElement("img", {src: this.props.spinner}), " Validating…"
       ))
     }
@@ -34650,19 +34658,19 @@ var BootstrapField = React.createClass({displayName: "BootstrapField",
     // Always show help text for empty fields, regardless of status
     var showHelpText = field.helpText && (field.isEmpty() || status == 'default')
 
-    return React.createElement("div", {className: containerClasses}, 
-      !isBooleanField && field.labelTag({attrs: {className: 'control-label'}}), 
-      !isSpecialCaseWidget && field.asWidget(widgetAttrs), 
-      isBooleanField && React.createElement("label", {htmlFor: field.idForLabel()}, 
+    return React.createElement("div", {className: containerClasses},
+      !isBooleanField && field.labelTag({attrs: {className: 'control-label'}}),
+      !isSpecialCaseWidget && field.asWidget(widgetAttrs),
+      isBooleanField && React.createElement("label", {htmlFor: field.idForLabel()},
         field.asWidget(), " ", field.label
-      ), 
-      isFileField && React.createElement("div", null, 
+      ),
+      isFileField && React.createElement("div", null,
         field.asWidget(widgetAttrs)
-      ), 
-      showHelpText && field.helpTextTag({attrs: {className: 'help-block'}}), 
-      status == 'pending' && React.createElement("span", {className: "help-block"}, 
+      ),
+      showHelpText && field.helpTextTag({attrs: {className: 'help-block'}}),
+      status == 'pending' && React.createElement("span", {className: "help-block"},
         React.createElement("img", {src: this.props.spinner}), " Validating…"
-      ), 
+      ),
       status == 'error' && field.errors().messages().map(errorMessage)
     )
   }
@@ -34817,17 +34825,17 @@ var Container = React.createClass({displayName: "Container",
     var $__0=  this.props,form=$__0.form
     patchForm(form)
     var formErrors = form.nonFieldErrors()
-    return React.createElement("div", {className: cx(this.props.className, {'container': !this.props.fluid, 'fluid': this.props.fluid})}, 
-      formErrors.isPopulated() && React.createElement("div", {key: form.addPrefix('__all__'), className: "alert alert-danger has-error"}, 
+    return React.createElement("div", {className: cx(this.props.className, {'container': !this.props.fluid, 'fluid': this.props.fluid})},
+      formErrors.isPopulated() && React.createElement("div", {key: form.addPrefix('__all__'), className: "alert alert-danger has-error"},
         formErrors.messages().map(errorMessage)
-      ), 
+      ),
       React.Children.map(this.props.children, function(row, index)  {return React.cloneElement(row, {
         autoColumns: this.props.autoColumns
       , form: this.props.form
       , index: index
       , spinner: this.props.spinner
-      });}.bind(this)), 
-      form.nonFieldPending() && React.createElement("span", {key: form.addPrefix('__pending__'), className: "help-block"}, 
+      });}.bind(this)),
+      form.nonFieldPending() && React.createElement("span", {key: form.addPrefix('__pending__'), className: "help-block"},
         React.createElement("img", {src: this.props.spinner}), " Validating…"
       )
     )
@@ -34852,7 +34860,7 @@ var Row = React.createClass({displayName: "Row",
       , rowNum: this.props.index + 1
       })
     }
-    return React.createElement("div", {className: cx('row', this.props.className)}, 
+    return React.createElement("div", {className: cx('row', this.props.className)},
       React.Children.map(this.props.children, function(child, index)  {
         return React.cloneElement(child, extend({
           form: this.props.form
@@ -34867,7 +34875,7 @@ var Col = React.createClass({displayName: "Col",
   mixins: [ColMixin],
 
   render:function() {
-    return React.createElement("div", {className: this.getColClassName()}, 
+    return React.createElement("div", {className: this.getColClassName()},
       this.props.children
     )
   }
@@ -34882,7 +34890,7 @@ var Field = React.createClass({displayName: "Field",
 
   render:function() {
     var field = this.props.form.boundField(this.props.name)
-    return React.createElement("div", {className: this.getColClassName()}, 
+    return React.createElement("div", {className: this.getColClassName()},
       React.createElement(BootstrapField, {key: field.htmlName, field: field})
     )
   }

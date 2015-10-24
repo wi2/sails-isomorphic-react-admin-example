@@ -12,7 +12,7 @@
     "admin"
   ],
   "dependencies": {
-    "auto-admin": "^0.2.4",
+    "auto-admin": "^0.2.8",
     "babelify": "^6.3.0",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
@@ -49,8 +49,5 @@
     "url": "git://github.com/wi2/sails-isomorphic-react-admin-example.git"
   },
   "author": "Mike WI2",
-  "license": "MIT",
-  "devDependencies": {
-    "auto-admin": "^0.2.2"
-  }
+  "license": "MIT"
 }
